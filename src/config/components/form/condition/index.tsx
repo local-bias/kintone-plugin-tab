@@ -1,4 +1,5 @@
-import React, { memo, useState, VFC, VFCX } from 'react';
+import React, { useState, VFC, VFCX } from 'react';
+import styled from '@emotion/styled';
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary } from '@mui/material';
 
 import ConditionForm from './condition-form';
@@ -12,7 +13,7 @@ type Props = ContainerProps & {
 
 const Component: VFCX<Props> = ({ className, condition, index, expanded, onChange }) => (
   <Accordion {...{ expanded, onChange, className }} variant='outlined' square>
-    <AccordionSummary>設定{index + 1}</AccordionSummary>
+    <AccordionSummary>タブ{index + 1}</AccordionSummary>
     <AccordionDetails>
       <ConditionForm {...{ condition, index }} />
     </AccordionDetails>
@@ -22,12 +23,18 @@ const Component: VFCX<Props> = ({ className, condition, index, expanded, onChang
   </Accordion>
 );
 
-const Container: VFC<ContainerProps> = memo(({ condition, index }) => {
+const StyledComponent = styled(Component)`
+  .input {
+    min-width: 250px;
+  }
+`;
+
+const Container: VFC<ContainerProps> = ({ condition, index }) => {
   const [expanded, setExpanded] = useState<boolean>(index === 0);
 
   const onChange = () => setExpanded((_expanded) => !_expanded);
 
-  return <Component {...{ condition, index, expanded, onChange }} />;
-});
+  return <StyledComponent {...{ condition, index, expanded, onChange }} />;
+};
 
 export default Container;

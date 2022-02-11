@@ -5,7 +5,14 @@ declare namespace kintone {
       conditions: Condition[];
     };
 
+    type DisplayMode = 'add' | 'sub';
+
     /** プラグインの制御単位の設定情報🔌 */
-    type Condition = { field: string };
+    type Condition = {
+      tabName: string;
+      tabIcon: string;
+      displayMode: DisplayMode;
+      fields: string[];
+    };
   }
 }

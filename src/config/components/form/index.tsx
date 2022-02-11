@@ -1,11 +1,11 @@
 import React, { FC, VFCX } from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from '@emotion/styled';
+import { CircularProgress } from '@mui/material';
 
 import { storageState } from '../../states';
 import ConditionAdditionButton from './condition-addition-button';
 import Condition from './condition';
-import { Loading } from '@common/components/loading';
 
 type Props = Readonly<{
   storage: kintone.plugin.Storage | null;
@@ -13,13 +13,18 @@ type Props = Readonly<{
 
 const Component: VFCX<Props> = ({ className, storage }) => (
   <div {...{ className }}>
-    {!storage && <Loading label='設定情報を取得しています' />}
+    {!storage && (
+      <>
+        <CircularProgress />
+        <div>設定情報を取得しています</div>
+      </>
+    )}
     {!!storage && (
       <>
         {storage.conditions.map((condition, index) => (
           <Condition key={index} {...{ condition, index }} />
         ))}
-        <ConditionAdditionButton />
+        <ConditionAdditionButton label='タブを追加' />
       </>
     )}
   </div>
