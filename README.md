@@ -9,6 +9,6 @@
 
 スクロールに追従する垂直方向のタブを追加します
 
-[詳細はこちら](https://ribbit.work)
+[詳細はこちら](https://ribbit.konomi.app)
 
-[ホームページ](https://ribbit.work)
+[ホームページ](https://ribbit.konomi.app)
