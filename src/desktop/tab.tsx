@@ -1,4 +1,4 @@
-import React, { useState, VFC, VFCX } from 'react';
+import React, { useState, FC, FCX } from 'react';
 import styled from '@emotion/styled';
 import { Box, Tab, Tabs } from '@mui/material';
 import { useRecoilValue } from 'recoil';
@@ -13,7 +13,7 @@ type Props = ContainerProps &
     storage: kintone.plugin.Storage | null;
   }>;
 
-const Component: VFCX<Props> = ({ className, index, onTabChange, storage }) => (
+const Component: FCX<Props> = ({ className, index, onTabChange, storage }) => (
   <div {...{ className }}>
     <div>
       {!storage && <div></div>}
@@ -43,7 +43,7 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-const Container: VFC<ContainerProps> = () => {
+const Container: FC<ContainerProps> = () => {
   const [index, setIndex] = useState(0);
   const storage = useRecoilValue(pluginConfigState);
 

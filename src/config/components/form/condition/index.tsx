@@ -1,4 +1,4 @@
-import React, { useState, VFC, VFCX } from 'react';
+import React, { useState, FC, FCX } from 'react';
 import styled from '@emotion/styled';
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary } from '@mui/material';
 
@@ -11,7 +11,7 @@ type Props = ContainerProps & {
   onChange: () => void;
 };
 
-const Component: VFCX<Props> = ({ className, condition, index, expanded, onChange }) => (
+const Component: FCX<Props> = ({ className, condition, index, expanded, onChange }) => (
   <Accordion {...{ expanded, onChange, className }} variant='outlined' square>
     <AccordionSummary>タブ{index + 1}</AccordionSummary>
     <AccordionDetails>
@@ -29,7 +29,7 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-const Container: VFC<ContainerProps> = ({ condition, index }) => {
+const Container: FC<ContainerProps> = ({ condition, index }) => {
   const [expanded, setExpanded] = useState<boolean>(index === 0);
 
   const onChange = () => setExpanded((_expanded) => !_expanded);

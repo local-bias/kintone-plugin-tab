@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import React, { FC } from 'react';
 import { RecoilRoot } from 'recoil';
 
 import { ErrorBoundary } from '@common/components/error-boundary';
@@ -8,7 +8,7 @@ import Tab from './tab';
 
 type Props = Readonly<{ config: kintone.plugin.Storage }>;
 
-const Component: VFC<Props> = ({ config }) => (
+const Component: FC<Props> = ({ config }) => (
   <RecoilRoot
     initializeState={({ set }) => {
       set(pluginConfigState, config);
