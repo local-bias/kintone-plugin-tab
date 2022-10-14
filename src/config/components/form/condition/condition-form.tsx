@@ -2,7 +2,6 @@ import React, { ChangeEventHandler, FC, FCX } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from '@emotion/styled';
 import produce from 'immer';
-import { Properties as FieldProperties } from '@kintone/rest-api-client/lib/client/types';
 
 import { appFieldsState, storageState } from '../../../states';
 import { FormControlLabel, IconButton, Radio, RadioGroup, TextField, Tooltip } from '@mui/material';
@@ -56,13 +55,13 @@ const Component: FCX<Props> = (props) => (
               value={field}
               onChange={(e) => props.onFieldsChange(i, e.target.value)}
             />
-            <Tooltip title='コピー設定を追加する'>
+            <Tooltip title='フィールドを追加する'>
               <IconButton size='small' onClick={() => props.addField(i)}>
                 <AddIcon fontSize='small' />
               </IconButton>
             </Tooltip>
             {props.condition.fields.length > 1 && (
-              <Tooltip title='このコピー設定を削除する'>
+              <Tooltip title='このフィールドを削除する'>
                 <IconButton size='small' onClick={() => props.removeField(i)}>
                   <DeleteIcon fontSize='small' />
                 </IconButton>
