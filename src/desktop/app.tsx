@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { RecoilRoot } from 'recoil';
 
-import { ErrorBoundary } from '@common/components/error-boundary';
+import { PluginErrorBoundary } from '@common/components/error-boundary';
 
 import { pluginConfigState } from './states';
 import Tab from './tab';
@@ -14,9 +14,9 @@ const Component: FC<Props> = ({ config }) => (
       set(pluginConfigState, config);
     }}
   >
-    <ErrorBoundary>
+    <PluginErrorBoundary>
       <Tab />
-    </ErrorBoundary>
+    </PluginErrorBoundary>
   </RecoilRoot>
 );
 
