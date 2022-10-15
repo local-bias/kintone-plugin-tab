@@ -3,7 +3,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from '@emotion/styled';
 import produce from 'immer';
 
-import { appFieldsState, storageState } from '../../../states';
+import { storageState } from '../../../states';
+import { appFieldsState } from '../../../states/kintone';
 import { FormControlLabel, IconButton, Radio, RadioGroup, TextField, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';

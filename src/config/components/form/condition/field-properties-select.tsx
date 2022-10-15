@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { Properties as FieldProperties } from '@kintone/rest-api-client/lib/client/types';
 import { MenuItem, TextField, Skeleton, TextFieldProps } from '@mui/material';
 import { useRecoilValue } from 'recoil';
-import { appFieldsState } from '../../../states';
+import { appFieldsState } from '../../../states/kintone';
 
 type ContainerProps = TextFieldProps;
 type Props = ContainerProps & { properties: FieldProperties };
