@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { css } from '@emotion/css';
 import { restoreStorage } from '@common/plugin';
 
@@ -17,6 +17,7 @@ const enables: launcher.Enables = (e) => !document.getElementById(ROOT_ID);
 
 const action: launcher.Action = async (event, pluginId) => {
   const config = restoreStorage(pluginId);
+  process.env.NODE_ENV === 'development' && console.log({ config });
 
   const target = document.querySelector('#record-gaia');
 
@@ -36,7 +37,8 @@ const action: launcher.Action = async (event, pluginId) => {
 
   target.prepend(div);
 
-  render(<App config={config} />, div);
+  createRoot(div).render(<App config={config} />);
+
   return event;
 };
 

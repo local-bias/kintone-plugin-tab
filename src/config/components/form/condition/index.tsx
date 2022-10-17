@@ -13,7 +13,10 @@ type Props = ContainerProps & {
 
 const Component: FCX<Props> = ({ className, condition, index, expanded, onChange }) => (
   <Accordion {...{ expanded, onChange, className }} variant='outlined' square>
-    <AccordionSummary>タブ{index + 1}</AccordionSummary>
+    <AccordionSummary>
+      タブ{index + 1}
+      {condition.tabName ? ` (${condition.tabName})` : ''}
+    </AccordionSummary>
     <AccordionDetails>
       <ConditionForm {...{ condition, index }} />
     </AccordionDetails>

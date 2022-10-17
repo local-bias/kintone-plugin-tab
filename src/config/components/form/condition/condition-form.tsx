@@ -3,12 +3,13 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from '@emotion/styled';
 import produce from 'immer';
 
-import { appFieldsState, storageState } from '../../../states';
-import { FormControlLabel, IconButton, Radio, RadioGroup, TextField, Tooltip } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { storageState } from '../../../states/plugin';
+import { appFieldsState } from '../../../states/kintone';
+import { FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
 
-import FieldPropertiesSelect from './field-properties-select';
+import GroupForm from './form-groups';
+import LabelForm from './form-labels';
+import FieldForm from './form-fields';
 
 type ContainerProps = { condition: kintone.plugin.Condition; index: number };
 type Props = ContainerProps & {
@@ -34,43 +35,9 @@ const Component: FCX<Props> = (props) => (
         />
       </div>
     </div>
-    <div>
-      <h3>フィールドの指定方法</h3>
-      <RadioGroup
-        defaultValue='sub'
-        value={props.condition.displayMode}
-        onChange={props.onDisplayModeChange}
-      >
-        <FormControlLabel value='add' control={<Radio />} label='指定したフィールドを表示' />
-        <FormControlLabel value='sub' control={<Radio />} label='指定したフィールドを非表示' />
-      </RadioGroup>
-    </div>
-    <div>
-      <h3>{props.condition.displayMode === 'sub' ? '表示しない' : '表示する'}フィールド</h3>
-      <div className='rows'>
-        {props.condition.fields.map((field, i) => (
-          <div key={i}>
-            <FieldPropertiesSelect
-              label='フィールドコード'
-              value={field}
-              onChange={(e) => props.onFieldsChange(i, e.target.value)}
-            />
-            <Tooltip title='フィールドを追加する'>
-              <IconButton size='small' onClick={() => props.addField(i)}>
-                <AddIcon fontSize='small' />
-              </IconButton>
-            </Tooltip>
-            {props.condition.fields.length > 1 && (
-              <Tooltip title='このフィールドを削除する'>
-                <IconButton size='small' onClick={() => props.removeField(i)}>
-                  <DeleteIcon fontSize='small' />
-                </IconButton>
-              </Tooltip>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
+    <FieldForm conditionIndex={props.index} />
+    <GroupForm conditionIndex={props.index} />
+    <LabelForm conditionIndex={props.index} />
   </div>
 );
 

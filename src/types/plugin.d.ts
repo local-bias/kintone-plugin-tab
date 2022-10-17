@@ -13,6 +13,10 @@ declare namespace kintone {
       tabIcon: string;
       displayMode: DisplayMode;
       fields: string[];
+      labelDisplayMode?: DisplayMode;
+      labels?: string[];
+      groupDisplayMode?: DisplayMode;
+      groups?: string[];
     };
   }
 }
