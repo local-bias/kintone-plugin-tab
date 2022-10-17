@@ -1,6 +1,6 @@
 {
   "manifest_version": 1,
-  "version": 1,
+  "version": 200,
   "type": "APP",
   "name": {
     "en": "vertical tab plugin",
