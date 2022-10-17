@@ -42,4 +42,8 @@ export const getNewCondition = (): kintone.plugin.Condition => ({
   tabIcon: '',
   displayMode: 'sub',
   fields: [''],
+  labelDisplayMode: 'sub',
+  labels: [''],
+  groupDisplayMode: 'sub',
+  groups: [''],
 });

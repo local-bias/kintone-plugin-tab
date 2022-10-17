@@ -1,6 +1,7 @@
 import { KintoneRestAPIClient } from '@kintone/rest-api-client';
 import { getAppId } from './kintone';
 import { kx } from '@type/kintone.api';
+import { useReducer } from 'react';
 
 /** kintoneアプリに初期状態で存在するフィールドタイプ */
 const DEFAULT_DEFINED_FIELDS: kx.FieldPropertyType[] = [
@@ -59,6 +60,25 @@ export const getAppLayout = async (_app?: number): Promise<kx.Layout> => {
   const { layout } = await kintoneClient.app.getFormLayout({ app });
 
   return layout;
+};
+
+export const flatLayout = (layout: kx.Layout): kx.layout.Field[] => {
+  const results: kx.layout.Field[] = [];
+  for (const chunk of layout) {
+    if (chunk.type === 'ROW') {
+      results.push(...flatLayoutRow(chunk));
+      continue;
+    } else if (chunk.type === 'GROUP') {
+      results.push(...flatLayout(chunk.layout));
+    } else if (chunk.type === 'SUBTABLE') {
+      results.push(...chunk.fields);
+    }
+  }
+  return results;
+};
+
+export const flatLayoutRow = (row: kx.layout.Row): kx.layout.Field[] => {
+  return row.fields.reduce<kx.layout.Field[]>((acc, field) => [...acc, field], []);
 };
 
 /** 指定のフィールドコードのフィールドを操作します */
