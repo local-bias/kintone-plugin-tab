@@ -75,11 +75,7 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
           <div className='rows'>
             {fields.map((field, i) => (
               <div key={i}>
-                <FieldPropertiesSelect
-                  label='フィールドコード'
-                  value={field}
-                  onChange={(e) => onFieldsChange(i, e.target.value)}
-                />
+                <FieldPropertiesSelect value={field} onChange={(e) => onFieldsChange(i, e)} />
                 <Tooltip title='フィールドを追加する'>
                   <IconButton size='small' onClick={() => addLabel(i)}>
                     <AddIcon fontSize='small' />

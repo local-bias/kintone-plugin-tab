@@ -1,37 +1,40 @@
-import React, { FC, FCX } from 'react';
-import styled from '@emotion/styled';
-import { Properties as FieldProperties } from '@kintone/rest-api-client/lib/client/types';
-import { MenuItem, TextField, Skeleton, TextFieldProps } from '@mui/material';
+import React, { FC } from 'react';
 import { useRecoilValue } from 'recoil';
+import { CircularProgress, TextField, Autocomplete } from '@mui/material';
+
+import { kx } from '../../../../types/kintone.api';
 import { appFieldsState } from '../../../states/kintone';
 
-type ContainerProps = TextFieldProps;
-type Props = ContainerProps & { properties: FieldProperties };
+type ContainerProps = {
+  value: string;
+  onChange: (code: string) => void;
+};
 
-const Component: FCX<Props> = ({ className, properties, ...others }) => (
+type Props = ContainerProps & {
+  fields: kx.FieldProperty[];
+};
+
+const Component: FC<Props> = ({ fields, value, onChange }) => (
   <>
-    {!properties && <Skeleton {...{ className }} />}
-    {!!properties && (
-      <TextField select {...{ ...others, className }}>
-        {Object.values(properties).map(({ code, label }, i) => (
-          <MenuItem key={i} value={code}>
-            {label}
-          </MenuItem>
-        ))}
-      </TextField>
+    {!fields && <CircularProgress />}
+    {!!fields && (
+      <Autocomplete
+        value={fields.find((field) => field.code === value)}
+        sx={{ width: '350px' }}
+        options={fields}
+        onChange={(_, option) => onChange(option?.code || '')}
+        renderInput={(params) => (
+          <TextField {...params} label='対象フィールド' variant='outlined' color='primary' />
+        )}
+      />
     )}
   </>
 );
 
-const StyledComponent = styled(Component)`
-  width: 250px;
-  height: 56px;
-`;
-
 const Container: FC<ContainerProps> = (props) => {
-  const properties = useRecoilValue(appFieldsState);
+  const fields = useRecoilValue(appFieldsState);
 
-  return <StyledComponent {...{ ...props, properties }} />;
+  return <Component {...{ ...props, fields }} />;
 };
 
 export default Container;
