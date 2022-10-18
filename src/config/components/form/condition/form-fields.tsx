@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
-import { FormControlLabel, IconButton, Radio, RadioGroup, Tooltip } from '@mui/material';
+import { FormControlLabel, IconButton, Radio, RadioGroup, Skeleton, Tooltip } from '@mui/material';
 import produce from 'immer';
-import React, { FCX } from 'react';
+import React, { FC, FCX, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { fieldDisplayModeState, fieldsState } from '../../../states/plugin';
 import AddIcon from '@mui/icons-material/Add';
@@ -75,11 +75,7 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
           <div className='rows'>
             {fields.map((field, i) => (
               <div key={i}>
-                <FieldPropertiesSelect
-                  label='フィールドコード'
-                  value={field}
-                  onChange={(e) => onFieldsChange(i, e.target.value)}
-                />
+                <FieldPropertiesSelect fieldCode={field} onChange={(e) => onFieldsChange(i, e)} />
                 <Tooltip title='フィールドを追加する'>
                   <IconButton size='small' onClick={() => addLabel(i)}>
                     <AddIcon fontSize='small' />
@@ -117,4 +113,27 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export default StyledComponent;
+const Container: FC<Props> = (props) => {
+  return (
+    <Suspense
+      fallback={
+        <div>
+          <Skeleton width={200} height={30} />
+          <div style={{ display: 'flex' }}>
+            <Skeleton style={{ marginRight: '120px' }} width={250} height={100} />
+            <div>
+              <Skeleton width={150} height={30} />
+              <Skeleton width={300} height={80} />
+              <Skeleton width={300} height={80} />
+              <Skeleton width={300} height={80} />
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <StyledComponent {...props} />
+    </Suspense>
+  );
+};
+
+export default Container;

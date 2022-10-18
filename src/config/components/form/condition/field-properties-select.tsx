@@ -1,37 +1,50 @@
-import React, { FC, FCX } from 'react';
-import styled from '@emotion/styled';
-import { Properties as FieldProperties } from '@kintone/rest-api-client/lib/client/types';
-import { MenuItem, TextField, Skeleton, TextFieldProps } from '@mui/material';
+import React, { FC, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
+import { TextField, Autocomplete } from '@mui/material';
+
+import { kx } from '../../../../types/kintone.api';
 import { appFieldsState } from '../../../states/kintone';
 
-type ContainerProps = TextFieldProps;
-type Props = ContainerProps & { properties: FieldProperties };
+type ContainerProps = {
+  fieldCode: string;
+  onChange: (code: string) => void;
+};
 
-const Component: FCX<Props> = ({ className, properties, ...others }) => (
-  <>
-    {!properties && <Skeleton {...{ className }} />}
-    {!!properties && (
-      <TextField select {...{ ...others, className }}>
-        {Object.values(properties).map(({ code, label }, i) => (
-          <MenuItem key={i} value={code}>
-            {label}
-          </MenuItem>
-        ))}
-      </TextField>
+type Props = {
+  value: kx.FieldProperty | null;
+  fields: kx.FieldProperty[];
+  onFieldChange: (_: any, field: kx.FieldProperty | null) => void;
+};
+
+const Component: FC<Props> = ({ fields, value, onFieldChange }) => (
+  <Autocomplete
+    value={value}
+    sx={{ width: '350px' }}
+    options={fields}
+    isOptionEqualToValue={(option, v) => option.code === v.code}
+    getOptionLabel={(option) => `${option.label}(${option.code})`}
+    onChange={onFieldChange}
+    renderInput={(params) => (
+      <TextField {...params} label='対象フィールド' variant='outlined' color='primary' />
     )}
-  </>
+  />
 );
 
-const StyledComponent = styled(Component)`
-  width: 250px;
-  height: 56px;
-`;
-
 const Container: FC<ContainerProps> = (props) => {
-  const properties = useRecoilValue(appFieldsState);
+  const fields = useRecoilValue(appFieldsState);
 
-  return <StyledComponent {...{ ...props, properties }} />;
+  const filtered = fields.filter((field) => field.code === props.fieldCode);
+
+  const value = filtered[0] ?? null;
+
+  const onFieldChange = useCallback(
+    (_: any, field: kx.FieldProperty | null) => {
+      props.onChange(field?.code ?? '');
+    },
+    [props.onChange]
+  );
+
+  return <Component {...{ onFieldChange, value, fields }} />;
 };
 
 export default Container;

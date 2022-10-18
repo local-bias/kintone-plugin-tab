@@ -1,11 +1,10 @@
-import React, { ChangeEventHandler, FC, FCX } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import React, { ChangeEventHandler, FC, FCX, Suspense } from 'react';
+import { useSetRecoilState } from 'recoil';
 import styled from '@emotion/styled';
 import produce from 'immer';
 
 import { storageState } from '../../../states/plugin';
-import { appFieldsState } from '../../../states/kintone';
-import { FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { Skeleton, TextField } from '@mui/material';
 
 import GroupForm from './form-groups';
 import LabelForm from './form-labels';
@@ -90,7 +89,6 @@ const StyledComponent = styled(Component)`
 `;
 
 const Container: FC<ContainerProps> = ({ condition, index }) => {
-  const dstAppProperties = useRecoilValue(appFieldsState);
   const setStorage = useSetRecoilState(storageState);
 
   const setConditionProps = <T extends keyof kintone.plugin.Condition>(
