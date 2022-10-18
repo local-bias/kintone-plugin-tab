@@ -5,11 +5,12 @@ import {
   MenuItem,
   Radio,
   RadioGroup,
+  Skeleton,
   TextField,
   Tooltip,
 } from '@mui/material';
 import produce from 'immer';
-import React, { FCX } from 'react';
+import React, { FC, FCX, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { appGroupsState } from '../../../states/kintone';
 import { conditionState, groupsState } from '../../../states/plugin';
@@ -152,4 +153,27 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export default StyledComponent;
+const Container: FC<Props> = (props) => {
+  return (
+    <Suspense
+      fallback={
+        <div>
+          <Skeleton width={200} height={30} />
+          <div style={{ display: 'flex' }}>
+            <Skeleton style={{ marginRight: '120px' }} width={250} height={100} />
+            <div>
+              <Skeleton width={150} height={30} />
+              <Skeleton width={300} height={80} />
+              <Skeleton width={300} height={80} />
+              <Skeleton width={300} height={80} />
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <StyledComponent {...props} />
+    </Suspense>
+  );
+};
+
+export default Container;
