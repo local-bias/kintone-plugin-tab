@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
-import { Properties } from '@kintone/rest-api-client/lib/client/types';
-import { flatLayout, getAppLayout, getFieldProperties } from '@common/kintone-api';
+import { getAppId } from '@lb-ribbit/kintone-xapp';
+import { flatLayout, kintoneClient } from '@common/kintone-api';
 import { kx } from '@type/kintone.api';
 
 const PREFIX = `kintone`;
@@ -8,7 +8,12 @@ const PREFIX = `kintone`;
 export const appFieldsState = selector<kx.FieldProperty[]>({
   key: 'AppFields',
   get: async () => {
-    const properties = await getFieldProperties();
+    const app = getAppId();
+    if (!app) {
+      throw new Error('アプリのフィールド情報が取得できませんでした');
+    }
+
+    const { properties } = await kintoneClient.app.getFormFields({ app, preview: true });
 
     const values = Object.values(properties);
 
@@ -19,7 +24,12 @@ export const appFieldsState = selector<kx.FieldProperty[]>({
 export const appLayoutState = selector<kx.Layout>({
   key: `${PREFIX}appLayoutState`,
   get: async () => {
-    const layout = await getAppLayout();
+    const app = getAppId();
+    if (!app) {
+      throw new Error('アプリのフィールド情報が取得できませんでした');
+    }
+
+    const { layout } = await kintoneClient.app.getFormLayout({ app, preview: true });
     return layout;
   },
 });
