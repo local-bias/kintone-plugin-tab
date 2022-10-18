@@ -1,7 +1,6 @@
 import { KintoneRestAPIClient } from '@kintone/rest-api-client';
-import { getAppId } from './kintone';
 import { kx } from '@type/kintone.api';
-import { useReducer } from 'react';
+import { getAppId } from '@lb-ribbit/kintone-xapp';
 
 /** kintoneアプリに初期状態で存在するフィールドタイプ */
 const DEFAULT_DEFINED_FIELDS: kx.FieldPropertyType[] = [

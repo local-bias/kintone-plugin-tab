@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { Tab, Tabs } from '@mui/material';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { appGroupsState, pluginConfigState, tabIndexState } from './states';
-import { getCurrentRecord, setFieldShown } from '@common/kintone';
+import { getCurrentRecord, setFieldShown } from '@lb-ribbit/kintone-xapp';
 
 const TabComponent: FC = () => {
   const storage = useRecoilValue(pluginConfigState)!;
