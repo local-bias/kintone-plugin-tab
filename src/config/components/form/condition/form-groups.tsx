@@ -104,7 +104,7 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
             {groups.map((field, i) => (
               <div key={i}>
                 <Autocomplete
-                  value={appGroups.filter((group) => group.code === field)[0] ?? null}
+                  value={appGroups.find((group) => group.code === field) ?? null}
                   sx={{ width: '350px' }}
                   options={appGroups}
                   isOptionEqualToValue={(option, v) => option.code === v.code}
