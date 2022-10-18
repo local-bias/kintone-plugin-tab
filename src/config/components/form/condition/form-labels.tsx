@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import {
+  Autocomplete,
   FormControlLabel,
   IconButton,
-  MenuItem,
   Radio,
   RadioGroup,
   Skeleton,
@@ -87,19 +87,15 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
           <div className='rows'>
             {labels.map((label, i) => (
               <div key={i}>
-                <TextField
-                  sx={{ minWidth: '250px' }}
-                  label='ラベル内容'
+                <Autocomplete
                   value={label}
-                  select
-                  onChange={(e) => onLabelsChange(i, e.target.value)}
-                >
-                  {allLabels.map((text, i) => (
-                    <MenuItem key={i} value={text}>
-                      {text.length > 20 ? `${text.slice(0, 20)}...` : text}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                  sx={{ width: '350px' }}
+                  options={allLabels}
+                  onChange={(_, lbl) => onLabelsChange(i, lbl ?? '')}
+                  renderInput={(params) => (
+                    <TextField {...params} label='対象ラベル' variant='outlined' color='primary' />
+                  )}
+                />
                 <Tooltip title='フィールドを追加する'>
                   <IconButton size='small' onClick={() => addLabel(i)}>
                     <AddIcon fontSize='small' />
@@ -147,9 +143,9 @@ const Container: FC<Props> = (props) => {
             <Skeleton style={{ marginRight: '120px' }} width={250} height={100} />
             <div>
               <Skeleton width={150} height={30} />
-              <Skeleton width={300} height={80} />
-              <Skeleton width={300} height={80} />
-              <Skeleton width={300} height={80} />
+              <Skeleton width={400} height={80} />
+              <Skeleton width={400} height={80} />
+              <Skeleton width={400} height={80} />
             </div>
           </div>
         </div>

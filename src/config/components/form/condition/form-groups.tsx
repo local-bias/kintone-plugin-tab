@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import {
+  Autocomplete,
   FormControlLabel,
   IconButton,
-  MenuItem,
   Radio,
   RadioGroup,
   Skeleton,
@@ -103,19 +103,22 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
           <div className='rows'>
             {groups.map((field, i) => (
               <div key={i}>
-                <TextField
-                  sx={{ minWidth: '250px' }}
-                  label='グループ名'
-                  value={field}
-                  select
-                  onChange={(e) => onGroupChange(i, e.target.value)}
-                >
-                  {appGroups.map(({ code }, i) => (
-                    <MenuItem key={i} value={code}>
-                      {code}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                <Autocomplete
+                  value={appGroups.filter((group) => group.code === field)[0] ?? null}
+                  sx={{ width: '350px' }}
+                  options={appGroups}
+                  isOptionEqualToValue={(option, v) => option.code === v.code}
+                  getOptionLabel={(option) => option.code}
+                  onChange={(_, group) => onGroupChange(i, group?.code ?? '')}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='対象グループ'
+                      variant='outlined'
+                      color='primary'
+                    />
+                  )}
+                />
                 <Tooltip title='フィールドを追加する'>
                   <IconButton size='small' onClick={() => addGroup(i)}>
                     <AddIcon fontSize='small' />
@@ -163,9 +166,9 @@ const Container: FC<Props> = (props) => {
             <Skeleton style={{ marginRight: '120px' }} width={250} height={100} />
             <div>
               <Skeleton width={150} height={30} />
-              <Skeleton width={300} height={80} />
-              <Skeleton width={300} height={80} />
-              <Skeleton width={300} height={80} />
+              <Skeleton width={400} height={80} />
+              <Skeleton width={400} height={80} />
+              <Skeleton width={400} height={80} />
             </div>
           </div>
         </div>
