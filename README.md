@@ -1,4 +1,4 @@
-<h1 align="center">🐢 kintone タブ表示プラグイン 🐢</h1>
+<h1 align="center">kintone タブ表示プラグイン</h1>
 
 <p align="left">
  <img src="https://data.jsdelivr.com/v1/package/gh/local-bias/kintone-plugin-tab/badge" />
@@ -9,6 +9,6 @@
 
 スクロールに追従する垂直方向のタブを追加します
 
-[詳細はこちら](https://ribbit.konomi.app)
+[詳細はこちら](https://ribbit.konomi.app/blog/kintone-plugin-tab)
 
 [ホームページ](https://ribbit.konomi.app)
