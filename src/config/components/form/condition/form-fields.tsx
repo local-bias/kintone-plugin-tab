@@ -123,9 +123,9 @@ const Container: FC<Props> = (props) => {
             <Skeleton style={{ marginRight: '120px' }} width={250} height={100} />
             <div>
               <Skeleton width={150} height={30} />
-              <Skeleton width={300} height={80} />
-              <Skeleton width={300} height={80} />
-              <Skeleton width={300} height={80} />
+              <Skeleton width={400} height={80} />
+              <Skeleton width={400} height={80} />
+              <Skeleton width={400} height={80} />
             </div>
           </div>
         </div>
