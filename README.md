@@ -9,6 +9,6 @@
 
 スクロールに追従する垂直方向のタブを追加します
 
-[詳細はこちら](https://ribbit.konomi.app/kintone-plugin-tab)
+[詳細はこちら](https://ribbit.konomi.app/blog/kintone-plugin-tab)
 
 [ホームページ](https://ribbit.konomi.app)
