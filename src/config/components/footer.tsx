@@ -38,10 +38,11 @@ const Component: FCX<Props> = ({ className, onSaveButtonClick, onBackButtonClick
 
 const StyledComponent = styled(Component)`
   position: sticky;
-  bottom: 24px;
+  bottom: 15px;
   margin-top: 20px;
   background-color: #fff;
   border-top: 1px solid #eee;
+  z-index: 100;
 
   button {
     margin: 8px;
