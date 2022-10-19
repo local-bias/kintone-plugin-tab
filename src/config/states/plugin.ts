@@ -204,3 +204,51 @@ export const labelsState = selectorFamily<string[], number>({
       );
     },
 });
+
+export const spaceDisplayModeState = selectorFamily<kintone.plugin.DisplayMode, number>({
+  key: `${PREFIX}spaceDisplayModeState`,
+  get:
+    (conditionIndex) =>
+    ({ get }) => {
+      return getConditionField(get(storageState), {
+        conditionIndex,
+        key: 'spaceDisplayMode',
+        defaultValue: 'sub',
+      });
+    },
+  set:
+    (conditionIndex) =>
+    ({ set }, newValue) => {
+      set(storageState, (current) =>
+        updated(current, {
+          conditionIndex,
+          key: 'spaceDisplayMode',
+          value: newValue as kintone.plugin.DisplayMode,
+        })
+      );
+    },
+});
+
+export const spaceIdsState = selectorFamily<string[], number>({
+  key: `${PREFIX}spaceIdsState`,
+  get:
+    (conditionIndex) =>
+    ({ get }) => {
+      return getConditionField(get(storageState), {
+        conditionIndex,
+        key: 'spaceIds',
+        defaultValue: [''],
+      });
+    },
+  set:
+    (conditionIndex) =>
+    ({ set }, newValue) => {
+      set(storageState, (current) =>
+        updated(current, {
+          conditionIndex,
+          key: 'spaceIds',
+          value: newValue as string[],
+        })
+      );
+    },
+});

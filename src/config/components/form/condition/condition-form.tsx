@@ -1,14 +1,15 @@
-import React, { ChangeEventHandler, FC, FCX, Suspense } from 'react';
+import React, { ChangeEventHandler, FC, FCX } from 'react';
 import { useSetRecoilState } from 'recoil';
 import styled from '@emotion/styled';
 import produce from 'immer';
 
 import { storageState } from '../../../states/plugin';
-import { Skeleton, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 
-import GroupForm from './form-groups';
-import LabelForm from './form-labels';
 import FieldForm from './form-fields';
+import GroupForm from './form-groups';
+import SpaceForm from './form-spaces';
+import LabelForm from './form-labels';
 
 type ContainerProps = { condition: kintone.plugin.Condition; index: number };
 type Props = ContainerProps & {
@@ -36,6 +37,7 @@ const Component: FCX<Props> = (props) => (
     </div>
     <FieldForm conditionIndex={props.index} />
     <GroupForm conditionIndex={props.index} />
+    <SpaceForm conditionIndex={props.index} />
     <LabelForm conditionIndex={props.index} />
   </div>
 );

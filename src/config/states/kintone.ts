@@ -69,3 +69,18 @@ export const appGroupsState = selector<kx.layout.Group[]>({
     return groups;
   },
 });
+
+export const appSpacesState = selector<kx.layout.Spacer[]>({
+  key: `${PREFIX}appSpacesState`,
+  get: ({ get }) => {
+    const layout = get(appLayoutState);
+
+    const fields = flatLayout(layout);
+
+    const spaces = fields.filter((field) => field.type === 'SPACER') as kx.layout.Spacer[];
+
+    const filtered = spaces.filter((space) => space.elementId);
+
+    return filtered;
+  },
+});

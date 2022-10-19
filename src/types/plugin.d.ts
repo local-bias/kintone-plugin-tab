@@ -17,6 +17,8 @@ declare namespace kintone {
       labels?: string[];
       groupDisplayMode?: DisplayMode;
       groups?: string[];
+      spaceDisplayMode?: DisplayMode;
+      spaceIds?: string[];
     };
   }
 }

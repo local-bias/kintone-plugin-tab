@@ -2,8 +2,8 @@ import React, { FC, FCX } from 'react';
 import styled from '@emotion/styled';
 import { Tab, Tabs } from '@mui/material';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { appGroupsState, pluginConfigState, tabIndexState } from './states';
-import { getCurrentRecord, setFieldShown } from '@lb-ribbit/kintone-xapp';
+import { appGroupsState, appSpacesState, pluginConfigState, tabIndexState } from './states';
+import { getCurrentRecord, getSpaceElement, setFieldShown } from '@lb-ribbit/kintone-xapp';
 
 const TabComponent: FC = () => {
   const storage = useRecoilValue(pluginConfigState)!;
@@ -37,6 +37,25 @@ const TabComponent: FC = () => {
         for (const group of allGroups) {
           const exists = groups.includes(group.code);
           setFieldShown(group.code, groupDisplayMode === 'sub' ? !exists : exists);
+        }
+
+        const { spaceIds = [], spaceDisplayMode } = condition;
+        const allSpaces = await snapshot.getPromise(appSpacesState);
+        for (const space of allSpaces) {
+          const exists = spaceIds.includes(space.elementId);
+          const spaceElement = getSpaceElement(space.elementId);
+          if (!spaceElement) {
+            continue;
+          }
+          const spaceWrapper = spaceElement.parentElement;
+          if (!spaceWrapper) {
+            continue;
+          }
+          if ((spaceDisplayMode === 'sub' && exists) || (spaceDisplayMode === 'add' && !exists)) {
+            spaceWrapper.style.display = 'none';
+          } else {
+            spaceWrapper.style.display = 'block';
+          }
         }
 
         const { labels = [], labelDisplayMode = 'sub' } = condition;

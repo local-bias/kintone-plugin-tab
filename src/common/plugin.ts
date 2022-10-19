@@ -46,4 +46,6 @@ export const getNewCondition = (): kintone.plugin.Condition => ({
   labels: [''],
   groupDisplayMode: 'sub',
   groups: [''],
+  spaceDisplayMode: 'sub',
+  spaceIds: [''],
 });
