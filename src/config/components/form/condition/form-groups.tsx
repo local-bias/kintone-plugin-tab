@@ -13,29 +13,21 @@ import produce from 'immer';
 import React, { FC, FCX, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { appGroupsState } from '../../../states/kintone';
-import { conditionState, groupsState } from '../../../states/plugin';
+import { conditionState, groupDisplayModeState, groupsState } from '../../../states/plugin';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 type Props = { conditionIndex: number };
 
 const Component: FCX<Props> = ({ className, conditionIndex }) => {
-  const condition = useRecoilValue(conditionState(conditionIndex));
-  if (!condition) {
-    return null;
-  }
-
   const appGroups = useRecoilValue(appGroupsState);
+  const groupDisplayMode = useRecoilValue(groupDisplayModeState(conditionIndex));
   const groups = useRecoilValue(groupsState(conditionIndex));
 
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(conditionState(conditionIndex), (current) =>
-          produce(current, (draft) => {
-            draft!.groupDisplayMode = value as kintone.plugin.DisplayMode;
-          })
-        );
+        set(groupDisplayModeState(conditionIndex), value as kintone.plugin.DisplayMode);
       },
     [conditionIndex]
   );
@@ -89,17 +81,13 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
       <h3>グループフィールドの設定</h3>
       <div className='form'>
         <div className='left'>
-          <RadioGroup
-            defaultValue='sub'
-            value={condition.groupDisplayMode}
-            onChange={onDisplayModeChange}
-          >
+          <RadioGroup defaultValue='sub' value={groupDisplayMode} onChange={onDisplayModeChange}>
             <FormControlLabel value='add' control={<Radio />} label='指定したグループだけ表示' />
             <FormControlLabel value='sub' control={<Radio />} label='指定したグループを非表示' />
           </RadioGroup>
         </div>
         <div className='right'>
-          <h3>{condition.groupDisplayMode === 'add' ? '表示する' : '表示しない'}グループ</h3>
+          <h3>{groupDisplayMode === 'add' ? '表示する' : '表示しない'}グループ</h3>
           <div className='rows'>
             {groups.map((field, i) => (
               <div key={i}>
