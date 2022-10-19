@@ -69,6 +69,30 @@ export const conditionState = selectorFamily<kintone.plugin.Condition | null, nu
     },
 });
 
+export const tabNameState = selectorFamily<string, number>({
+  key: `${PREFIX}tabNameState`,
+  get:
+    (conditionIndex) =>
+    ({ get }) => {
+      return getConditionField(get(storageState), {
+        conditionIndex,
+        key: 'tabName',
+        defaultValue: '',
+      });
+    },
+  set:
+    (conditionIndex) =>
+    ({ set }, newValue) => {
+      set(storageState, (current) =>
+        updated(current, {
+          conditionIndex,
+          key: 'tabName',
+          value: newValue as string,
+        })
+      );
+    },
+});
+
 export const fieldDisplayModeState = selectorFamily<kintone.plugin.DisplayMode, number>({
   key: `${PREFIX}fieldDisplayModeState`,
   get:

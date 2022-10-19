@@ -1,34 +1,21 @@
-import React, { ChangeEventHandler, FC, FCX } from 'react';
-import { useSetRecoilState } from 'recoil';
+import React, { FC, FCX } from 'react';
 import styled from '@emotion/styled';
-import produce from 'immer';
 
-import { storageState } from '../../../states/plugin';
-import { TextField } from '@mui/material';
-
+import TabNameForm from './form-tabname';
 import FieldForm from './form-fields';
 import GroupForm from './form-groups';
 import SpaceForm from './form-spaces';
 import LabelForm from './form-labels';
 
 type ContainerProps = { condition: kintone.plugin.Condition; index: number };
-type Props = ContainerProps & {
-  onTabNameChange: ChangeEventHandler<HTMLInputElement>;
-  onTabIconChange: ChangeEventHandler<HTMLInputElement>;
-};
+type Props = ContainerProps & {};
 
 const Component: FCX<Props> = (props) => (
   <div className={props.className}>
     <div>
       <h3>タブ情報</h3>
       <div className='form-components'>
-        <TextField
-          className='input'
-          label='タブ名'
-          variant='outlined'
-          value={props.condition.tabName}
-          onChange={props.onTabNameChange}
-        />
+        <TabNameForm conditionIndex={props.index} />
       </div>
     </div>
     <FieldForm conditionIndex={props.index} />
@@ -86,37 +73,8 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-const Container: FC<ContainerProps> = ({ condition, index }) => {
-  const setStorage = useSetRecoilState(storageState);
-
-  const setConditionProps = <T extends keyof kintone.plugin.Condition>(
-    key: T,
-    value: kintone.plugin.Condition[T]
-  ) => {
-    setStorage((_, _storage = _!) =>
-      produce(_storage, (draft) => {
-        draft.conditions[index][key] = value;
-      })
-    );
-  };
-
-  const onTabNameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setConditionProps('tabName', e.target.value);
-  };
-  const onTabIconChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setConditionProps('tabIcon', e.target.value);
-  };
-
-  return (
-    <StyledComponent
-      {...{
-        condition,
-        index,
-        onTabNameChange,
-        onTabIconChange,
-      }}
-    />
-  );
+const Container: FC<ContainerProps> = (props) => {
+  return <StyledComponent {...props} />;
 };
 
 export default Container;
