@@ -15,10 +15,6 @@ type ContainerProps = { condition: kintone.plugin.Condition; index: number };
 type Props = ContainerProps & {
   onTabNameChange: ChangeEventHandler<HTMLInputElement>;
   onTabIconChange: ChangeEventHandler<HTMLInputElement>;
-  onFieldsChange: (rowIndex: number, value: string) => void;
-  addField: (rowIndex: number) => void;
-  removeField: (rowIndex: number) => void;
-  onDisplayModeChange: (_: any, value: string) => void;
 };
 
 const Component: FCX<Props> = (props) => (
@@ -111,46 +107,6 @@ const Container: FC<ContainerProps> = ({ condition, index }) => {
     setConditionProps('tabIcon', e.target.value);
   };
 
-  const onFieldsChange = (rowIndex: number, value: string) => {
-    setStorage((_storage) =>
-      produce(_storage, (draft) => {
-        if (!draft) {
-          return;
-        }
-        const { fields } = draft.conditions[index];
-        fields[rowIndex] = value;
-      })
-    );
-  };
-
-  const addField = (rowIndex: number) => {
-    setStorage((_storage) =>
-      produce(_storage, (draft) => {
-        if (!draft) {
-          return;
-        }
-        const { fields } = draft.conditions[index];
-        fields.splice(rowIndex + 1, 0, '');
-      })
-    );
-  };
-
-  const removeField = (rowIndex: number) => {
-    setStorage((_storage) =>
-      produce(_storage, (draft) => {
-        if (!draft) {
-          return;
-        }
-        const { fields } = draft.conditions[index];
-        fields.splice(rowIndex, 1);
-      })
-    );
-  };
-
-  const onDisplayModeChange = (_: any, value: string) => {
-    setConditionProps('displayMode', value as kintone.plugin.DisplayMode);
-  };
-
   return (
     <StyledComponent
       {...{
@@ -158,10 +114,6 @@ const Container: FC<ContainerProps> = ({ condition, index }) => {
         index,
         onTabNameChange,
         onTabIconChange,
-        onFieldsChange,
-        addField,
-        removeField,
-        onDisplayModeChange,
       }}
     />
   );
