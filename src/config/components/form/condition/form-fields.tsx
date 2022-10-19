@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { FormControlLabel, IconButton, Radio, RadioGroup, Skeleton, Tooltip } from '@mui/material';
 import produce from 'immer';
-import React, { FC, FCX, Suspense } from 'react';
+import React, { FC, FCX, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { fieldDisplayModeState, fieldsState } from '../../../states/plugin';
 import AddIcon from '@mui/icons-material/Add';
@@ -136,4 +136,4 @@ const Container: FC<Props> = (props) => {
   );
 };
 
-export default Container;
+export default memo(Container);

@@ -1,5 +1,5 @@
 import { TextField } from '@mui/material';
-import React, { ChangeEventHandler, FC } from 'react';
+import React, { ChangeEventHandler, FC, memo } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { tabNameState } from '../../../states/plugin';
 
@@ -27,4 +27,4 @@ const Component: FC<Props> = ({ conditionIndex }) => {
   );
 };
 
-export default Component;
+export default memo(Component);
