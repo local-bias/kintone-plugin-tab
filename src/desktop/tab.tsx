@@ -66,7 +66,6 @@ const TabComponent: FC = () => {
 
         for (const labelElement of labelElements) {
           const text = labelElement.textContent;
-          console.log({ text, labels });
           const exists = text && labels.some((label) => label === text);
           if ((labelDisplayMode === 'sub' && exists) || (labelDisplayMode === 'add' && !exists)) {
             labelElement.style.display = 'none';
