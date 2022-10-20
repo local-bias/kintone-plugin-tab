@@ -75,8 +75,8 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
       <div className='form'>
         <div className='left'>
           <RadioGroup defaultValue='sub' value={spaceDisplayMode} onChange={onDisplayModeChange}>
-            <FormControlLabel value='add' control={<Radio />} label='指定したグループだけ表示' />
-            <FormControlLabel value='sub' control={<Radio />} label='指定したグループを非表示' />
+            <FormControlLabel value='add' control={<Radio />} label='指定したスペースだけ表示' />
+            <FormControlLabel value='sub' control={<Radio />} label='指定したスペースを非表示' />
           </RadioGroup>
         </div>
         <div className='right'>
