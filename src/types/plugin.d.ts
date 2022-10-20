@@ -19,6 +19,7 @@ declare namespace kintone {
       groups?: string[];
       spaceDisplayMode?: DisplayMode;
       spaceIds?: string[];
+      hidesHR?: boolean;
     };
   }
 }

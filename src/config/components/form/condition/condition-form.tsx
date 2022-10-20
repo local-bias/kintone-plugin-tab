@@ -6,6 +6,7 @@ import FieldForm from './form-fields';
 import GroupForm from './form-groups';
 import SpaceForm from './form-spaces';
 import LabelForm from './form-labels';
+import HRForm from './form-hr';
 
 type ContainerProps = { condition: kintone.plugin.Condition; index: number };
 type Props = ContainerProps & {};
@@ -22,6 +23,7 @@ const Component: FCX<Props> = (props) => (
     <GroupForm conditionIndex={props.index} />
     <SpaceForm conditionIndex={props.index} />
     <LabelForm conditionIndex={props.index} />
+    <HRForm conditionIndex={props.index} />
   </div>
 );
 

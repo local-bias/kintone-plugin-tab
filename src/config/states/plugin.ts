@@ -276,3 +276,27 @@ export const spaceIdsState = selectorFamily<string[], number>({
       );
     },
 });
+
+export const hidesHRState = selectorFamily<boolean, number>({
+  key: `${PREFIX}hidesHRState`,
+  get:
+    (conditionIndex) =>
+    ({ get }) => {
+      return getConditionField(get(storageState), {
+        conditionIndex,
+        key: 'hidesHR',
+        defaultValue: false,
+      });
+    },
+  set:
+    (conditionIndex) =>
+    ({ set }, newValue) => {
+      set(storageState, (current) =>
+        updated(current, {
+          conditionIndex,
+          key: 'hidesHR',
+          value: newValue as boolean,
+        })
+      );
+    },
+});

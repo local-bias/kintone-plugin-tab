@@ -73,6 +73,10 @@ const TabComponent: FC = () => {
             labelElement.style.display = 'block';
           }
         }
+
+        const { hidesHR = false } = condition;
+        const hrElements = document.querySelectorAll<HTMLHRElement>('.hr-cybozu');
+        hrElements.forEach((el) => (el.style.display = hidesHR ? 'none' : 'block'));
       },
     []
   );
