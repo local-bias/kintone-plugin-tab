@@ -7,11 +7,11 @@ import { PluginErrorBoundary } from '@common/components/error-boundary';
 
 import Form from './components/form';
 import Footer from './components/footer';
-import SocialIcons from './components/social-icons';
 
 import { pluginIdState } from './states';
 import { storageState } from './states/plugin';
 import { Loading } from '@common/components/loading';
+import { URL_PROMOTION } from '@common/static';
 
 const Component: FC<{ pluginId: string }> = ({ pluginId }) => (
   <>
@@ -30,7 +30,12 @@ const Component: FC<{ pluginId: string }> = ({ pluginId }) => (
         </SnackbarProvider>
       </PluginErrorBoundary>
     </RecoilRoot>
-    <SocialIcons />
+    <iframe
+      title='promotion'
+      loading='lazy'
+      src={URL_PROMOTION}
+      style={{ border: '0', width: '100%', height: '64px' }}
+    />
   </>
 );
 
