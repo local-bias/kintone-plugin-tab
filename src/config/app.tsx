@@ -5,8 +5,10 @@ import { SnackbarProvider } from 'notistack';
 import { restoreStorage } from '@common/plugin';
 import { PluginErrorBoundary } from '@common/components/error-boundary';
 
-import Form from './components/form';
-import Footer from './components/footer';
+import Layout from './components/model/layout';
+import Sidebar from './components/model/sidebar';
+import Form from './components/model/form';
+import Footer from './components/model/footer';
 
 import { pluginIdState } from './states';
 import { storageState } from './states/plugin';
@@ -23,10 +25,13 @@ const Component: FC<{ pluginId: string }> = ({ pluginId }) => (
     >
       <PluginErrorBoundary>
         <SnackbarProvider maxSnack={1}>
-          <Suspense fallback={<Loading label='設定情報を取得しています' />}>
-            <Form />
-            <Footer />
-          </Suspense>
+          <Layout>
+            <Suspense fallback={<Loading label='設定情報を取得しています...' />}>
+              <Sidebar />
+              <Form />
+              <Footer />
+            </Suspense>
+          </Layout>
         </SnackbarProvider>
       </PluginErrorBoundary>
     </RecoilRoot>

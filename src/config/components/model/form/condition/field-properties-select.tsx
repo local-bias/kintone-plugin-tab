@@ -2,8 +2,8 @@ import React, { FC, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import { TextField, Autocomplete } from '@mui/material';
 
-import { kx } from '../../../../types/kintone.api';
-import { appFieldsState } from '../../../states/kintone';
+import { kx } from '../../../../../types/kintone.api';
+import { appFieldsState } from '../../../../states/kintone';
 
 type ContainerProps = {
   fieldCode: string;
