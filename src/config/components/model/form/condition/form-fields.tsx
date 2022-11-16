@@ -1,41 +1,32 @@
 import styled from '@emotion/styled';
-import {
-  Autocomplete,
-  FormControlLabel,
-  IconButton,
-  Radio,
-  RadioGroup,
-  Skeleton,
-  TextField,
-  Tooltip,
-} from '@mui/material';
+import { FormControlLabel, IconButton, Radio, RadioGroup, Skeleton, Tooltip } from '@mui/material';
 import produce from 'immer';
 import React, { FC, FCX, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { labelDisplayModeState, labelsState } from '../../../states/plugin';
+import { fieldDisplayModeState, fieldsState } from '../../../../states/plugin';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { appLabelsState } from '../../../states/kintone';
 
-type Props = { conditionIndex: number };
+import FieldPropertiesSelect from './field-properties-select';
+import { useConditionIndex } from '../../../condition-index-provider';
 
-const Component: FCX<Props> = ({ className, conditionIndex }) => {
-  const allLabels = useRecoilValue(appLabelsState);
-  const labels = useRecoilValue(labelsState(conditionIndex));
-  const labelDisplayMode = useRecoilValue(labelDisplayModeState(conditionIndex));
+const Component: FCX = ({ className }) => {
+  const conditionIndex = useConditionIndex();
+  const fields = useRecoilValue(fieldsState(conditionIndex));
+  const displayMode = useRecoilValue(fieldDisplayModeState(conditionIndex));
 
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(labelDisplayModeState(conditionIndex), value as kintone.plugin.DisplayMode);
+        set(fieldDisplayModeState(conditionIndex), value as kintone.plugin.DisplayMode);
       },
     [conditionIndex]
   );
 
-  const onLabelsChange = useRecoilCallback(
+  const onFieldsChange = useRecoilCallback(
     ({ set }) =>
       (i: number, value: string) => {
-        set(labelsState(conditionIndex), (current) =>
+        set(fieldsState(conditionIndex), (current) =>
           produce(current, (draft) => {
             draft[i] = value;
           })
@@ -47,7 +38,7 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
   const addLabel = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(labelsState(conditionIndex), (current) =>
+        set(fieldsState(conditionIndex), (current) =>
           produce(current, (draft) => {
             draft.splice(i + 1, 0, '');
           })
@@ -57,7 +48,7 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
   const removeLabel = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(labelsState(conditionIndex), (current) =>
+        set(fieldsState(conditionIndex), (current) =>
           produce(current, (draft) => {
             if (draft.length === 1) {
               draft[0] = '';
@@ -71,31 +62,20 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
 
   return (
     <section className={className}>
-      <h3>ラベルフィールドの設定</h3>
-      <small style={{ display: 'block', marginBottom: '16px' }}>
-        ラベルはキー情報を持たないため、少しでもラベルに変更があると、表示・非表示の設定から外れてしまいます。
-      </small>
+      <h3>フィールドの設定</h3>
       <div className='form'>
         <div className='left'>
-          <RadioGroup defaultValue='sub' value={labelDisplayMode} onChange={onDisplayModeChange}>
-            <FormControlLabel value='add' control={<Radio />} label='指定したラベルだけ表示' />
-            <FormControlLabel value='sub' control={<Radio />} label='指定したラベルを非表示' />
+          <RadioGroup defaultValue='sub' value={displayMode} onChange={onDisplayModeChange}>
+            <FormControlLabel value='add' control={<Radio />} label='指定したフィールドだけ表示' />
+            <FormControlLabel value='sub' control={<Radio />} label='指定したフィールドを非表示' />
           </RadioGroup>
         </div>
         <div className='right'>
-          <h3>{labelDisplayMode === 'add' ? '表示する' : '表示しない'}ラベル</h3>
+          <h3>{displayMode === 'add' ? '表示する' : '表示しない'}フィールド</h3>
           <div className='rows'>
-            {labels.map((label, i) => (
+            {fields.map((field, i) => (
               <div key={i}>
-                <Autocomplete
-                  value={label}
-                  sx={{ width: '350px' }}
-                  options={allLabels}
-                  onChange={(_, lbl) => onLabelsChange(i, lbl ?? '')}
-                  renderInput={(params) => (
-                    <TextField {...params} label='対象ラベル' variant='outlined' color='primary' />
-                  )}
-                />
+                <FieldPropertiesSelect fieldCode={field} onChange={(e) => onFieldsChange(i, e)} />
                 <Tooltip title='フィールドを追加する'>
                   <IconButton size='small' onClick={() => addLabel(i)}>
                     <AddIcon fontSize='small' />
@@ -116,8 +96,7 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
 };
 
 const StyledComponent = styled(Component)`
-  border-left: 2px solid #0003;
-  padding: 8px 8px 8px 16px;
+  padding: 8px;
 
   .form {
     display: flex;
@@ -133,7 +112,7 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-const Container: FC<Props> = (props) => {
+const Container: FC = (props) => {
   return (
     <Suspense
       fallback={

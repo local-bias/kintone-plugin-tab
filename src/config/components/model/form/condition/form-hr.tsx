@@ -1,11 +1,11 @@
 import React, { FC, memo } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { FormControlLabel, Switch } from '@mui/material';
-import { hidesHRState } from '../../../states/plugin';
+import { useConditionIndex } from '../../../condition-index-provider';
+import { hidesHRState } from '../../../../states/plugin';
 
-type Props = { conditionIndex: number };
-
-const Component: FC<Props> = ({ conditionIndex }) => {
+const Component: FC = () => {
+  const conditionIndex = useConditionIndex();
   const hidesHR = useRecoilValue(hidesHRState(conditionIndex));
 
   const onSwitchChange = useRecoilCallback(
@@ -17,11 +17,14 @@ const Component: FC<Props> = ({ conditionIndex }) => {
   );
 
   return (
-    <FormControlLabel
-      control={<Switch color='primary' checked={hidesHR} />}
-      onChange={(_, checked) => onSwitchChange(checked)}
-      label='罫線を全て非表示'
-    />
+    <div>
+      <h3>罫線の設定</h3>
+      <FormControlLabel
+        control={<Switch color='primary' checked={hidesHR} />}
+        onChange={(_, checked) => onSwitchChange(checked)}
+        label='罫線を全て非表示'
+      />
+    </div>
   );
 };
 

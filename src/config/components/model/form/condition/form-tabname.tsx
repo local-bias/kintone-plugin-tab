@@ -1,11 +1,11 @@
 import { TextField } from '@mui/material';
 import React, { ChangeEventHandler, FC, memo } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { tabNameState } from '../../../states/plugin';
+import { tabNameState } from '../../../../states/plugin';
+import { useConditionIndex } from '../../../condition-index-provider';
 
-type Props = { conditionIndex: number };
-
-const Component: FC<Props> = ({ conditionIndex }) => {
+const Component: FC = () => {
+  const conditionIndex = useConditionIndex();
   const tabName = useRecoilValue(tabNameState(conditionIndex));
 
   const onTabNameChange: ChangeEventHandler<HTMLInputElement> = useRecoilCallback(

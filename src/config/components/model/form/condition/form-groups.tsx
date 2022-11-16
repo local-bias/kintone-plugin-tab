@@ -12,14 +12,14 @@ import {
 import produce from 'immer';
 import React, { FC, FCX, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { appGroupsState } from '../../../states/kintone';
-import { conditionState, groupDisplayModeState, groupsState } from '../../../states/plugin';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { appGroupsState } from '../../../../states/kintone';
+import { conditionState, groupDisplayModeState, groupsState } from '../../../../states/plugin';
+import { useConditionIndex } from '../../../condition-index-provider';
 
-type Props = { conditionIndex: number };
-
-const Component: FCX<Props> = ({ className, conditionIndex }) => {
+const Component: FCX = ({ className }) => {
+  const conditionIndex = useConditionIndex();
   const appGroups = useRecoilValue(appGroupsState);
   const groupDisplayMode = useRecoilValue(groupDisplayModeState(conditionIndex));
   const groups = useRecoilValue(groupsState(conditionIndex));
@@ -127,8 +127,7 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
 };
 
 const StyledComponent = styled(Component)`
-  border-left: 2px solid #0003;
-  padding: 8px 8px 8px 16px;
+  padding: 8px;
 
   .form {
     display: flex;
@@ -144,7 +143,7 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-const Container: FC<Props> = (props) => {
+const Container: FC = (props) => {
   return (
     <Suspense
       fallback={

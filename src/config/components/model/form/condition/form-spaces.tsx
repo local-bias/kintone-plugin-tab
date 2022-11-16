@@ -1,32 +1,41 @@
 import styled from '@emotion/styled';
-import { FormControlLabel, IconButton, Radio, RadioGroup, Skeleton, Tooltip } from '@mui/material';
+import {
+  Autocomplete,
+  FormControlLabel,
+  IconButton,
+  Radio,
+  RadioGroup,
+  Skeleton,
+  TextField,
+  Tooltip,
+} from '@mui/material';
 import produce from 'immer';
 import React, { FC, FCX, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { fieldDisplayModeState, fieldsState } from '../../../states/plugin';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useConditionIndex } from '../../../condition-index-provider';
+import { appSpacesState } from '../../../../states/kintone';
+import { spaceDisplayModeState, spaceIdsState } from '../../../../states/plugin';
 
-import FieldPropertiesSelect from './field-properties-select';
-
-type Props = { conditionIndex: number };
-
-const Component: FCX<Props> = ({ className, conditionIndex }) => {
-  const fields = useRecoilValue(fieldsState(conditionIndex));
-  const displayMode = useRecoilValue(fieldDisplayModeState(conditionIndex));
+const Component: FCX = ({ className }) => {
+  const conditionIndex = useConditionIndex();
+  const appSpaces = useRecoilValue(appSpacesState);
+  const spaceDisplayMode = useRecoilValue(spaceDisplayModeState(conditionIndex));
+  const spaceIds = useRecoilValue(spaceIdsState(conditionIndex));
 
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(fieldDisplayModeState(conditionIndex), value as kintone.plugin.DisplayMode);
+        set(spaceDisplayModeState(conditionIndex), value as kintone.plugin.DisplayMode);
       },
     [conditionIndex]
   );
 
-  const onFieldsChange = useRecoilCallback(
+  const onSpaceIdChange = useRecoilCallback(
     ({ set }) =>
       (i: number, value: string) => {
-        set(fieldsState(conditionIndex), (current) =>
+        set(spaceIdsState(conditionIndex), (current) =>
           produce(current, (draft) => {
             draft[i] = value;
           })
@@ -35,20 +44,20 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
     [conditionIndex]
   );
 
-  const addLabel = useRecoilCallback(
+  const addSpaceId = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(fieldsState(conditionIndex), (current) =>
+        set(spaceIdsState(conditionIndex), (current) =>
           produce(current, (draft) => {
             draft.splice(i + 1, 0, '');
           })
         ),
     [conditionIndex]
   );
-  const removeLabel = useRecoilCallback(
+  const removeSpaceId = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(fieldsState(conditionIndex), (current) =>
+        set(spaceIdsState(conditionIndex), (current) =>
           produce(current, (draft) => {
             if (draft.length === 1) {
               draft[0] = '';
@@ -62,27 +71,42 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
 
   return (
     <section className={className}>
-      <h3>フィールドの設定</h3>
+      <h3>スペースフィールドの設定</h3>
       <div className='form'>
         <div className='left'>
-          <RadioGroup defaultValue='sub' value={displayMode} onChange={onDisplayModeChange}>
-            <FormControlLabel value='add' control={<Radio />} label='指定したフィールドだけ表示' />
-            <FormControlLabel value='sub' control={<Radio />} label='指定したフィールドを非表示' />
+          <RadioGroup defaultValue='sub' value={spaceDisplayMode} onChange={onDisplayModeChange}>
+            <FormControlLabel value='add' control={<Radio />} label='指定したスペースだけ表示' />
+            <FormControlLabel value='sub' control={<Radio />} label='指定したスペースを非表示' />
           </RadioGroup>
         </div>
         <div className='right'>
-          <h3>{displayMode === 'add' ? '表示する' : '表示しない'}フィールド</h3>
+          <h3>{spaceDisplayMode === 'add' ? '表示する' : '表示しない'}スペース</h3>
           <div className='rows'>
-            {fields.map((field, i) => (
+            {spaceIds.map((spaceId, i) => (
               <div key={i}>
-                <FieldPropertiesSelect fieldCode={field} onChange={(e) => onFieldsChange(i, e)} />
+                <Autocomplete
+                  value={appSpaces.find((spacer) => spacer.elementId === spaceId) ?? null}
+                  sx={{ width: '350px' }}
+                  options={appSpaces}
+                  isOptionEqualToValue={(option, v) => option.elementId === v.elementId}
+                  getOptionLabel={(option) => option.elementId}
+                  onChange={(_, group) => onSpaceIdChange(i, group?.elementId ?? '')}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='対象スペースID'
+                      variant='outlined'
+                      color='primary'
+                    />
+                  )}
+                />
                 <Tooltip title='フィールドを追加する'>
-                  <IconButton size='small' onClick={() => addLabel(i)}>
+                  <IconButton size='small' onClick={() => addSpaceId(i)}>
                     <AddIcon fontSize='small' />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title='このフィールドを削除する'>
-                  <IconButton size='small' onClick={() => removeLabel(i)}>
+                  <IconButton size='small' onClick={() => removeSpaceId(i)}>
                     <DeleteIcon fontSize='small' />
                   </IconButton>
                 </Tooltip>
@@ -96,8 +120,7 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
 };
 
 const StyledComponent = styled(Component)`
-  border-left: 2px solid #0003;
-  padding: 8px 8px 8px 16px;
+  padding: 8px;
 
   .form {
     display: flex;
@@ -113,7 +136,7 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-const Container: FC<Props> = (props) => {
+const Container: FC = (props) => {
   return (
     <Suspense
       fallback={

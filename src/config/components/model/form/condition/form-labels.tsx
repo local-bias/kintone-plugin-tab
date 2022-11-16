@@ -1,4 +1,7 @@
+import React, { FC, FCX, memo, Suspense } from 'react';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 import styled from '@emotion/styled';
+import produce from 'immer';
 import {
   Autocomplete,
   FormControlLabel,
@@ -9,33 +12,30 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material';
-import produce from 'immer';
-import React, { FC, FCX, memo, Suspense } from 'react';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { appSpacesState } from '../../../states/kintone';
-import { spaceDisplayModeState, spaceIdsState } from '../../../states/plugin';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { appLabelsState } from '../../../../states/kintone';
+import { useConditionIndex } from '../../../condition-index-provider';
+import { labelDisplayModeState, labelsState } from '../../../../states/plugin';
 
-type Props = { conditionIndex: number };
-
-const Component: FCX<Props> = ({ className, conditionIndex }) => {
-  const appSpaces = useRecoilValue(appSpacesState);
-  const spaceDisplayMode = useRecoilValue(spaceDisplayModeState(conditionIndex));
-  const spaceIds = useRecoilValue(spaceIdsState(conditionIndex));
+const Component: FCX = ({ className }) => {
+  const conditionIndex = useConditionIndex();
+  const allLabels = useRecoilValue(appLabelsState);
+  const labels = useRecoilValue(labelsState(conditionIndex));
+  const labelDisplayMode = useRecoilValue(labelDisplayModeState(conditionIndex));
 
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(spaceDisplayModeState(conditionIndex), value as kintone.plugin.DisplayMode);
+        set(labelDisplayModeState(conditionIndex), value as kintone.plugin.DisplayMode);
       },
     [conditionIndex]
   );
 
-  const onSpaceIdChange = useRecoilCallback(
+  const onLabelsChange = useRecoilCallback(
     ({ set }) =>
       (i: number, value: string) => {
-        set(spaceIdsState(conditionIndex), (current) =>
+        set(labelsState(conditionIndex), (current) =>
           produce(current, (draft) => {
             draft[i] = value;
           })
@@ -44,20 +44,20 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
     [conditionIndex]
   );
 
-  const addSpaceId = useRecoilCallback(
+  const addLabel = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(spaceIdsState(conditionIndex), (current) =>
+        set(labelsState(conditionIndex), (current) =>
           produce(current, (draft) => {
             draft.splice(i + 1, 0, '');
           })
         ),
     [conditionIndex]
   );
-  const removeSpaceId = useRecoilCallback(
+  const removeLabel = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(spaceIdsState(conditionIndex), (current) =>
+        set(labelsState(conditionIndex), (current) =>
           produce(current, (draft) => {
             if (draft.length === 1) {
               draft[0] = '';
@@ -71,42 +71,38 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
 
   return (
     <section className={className}>
-      <h3>スペースフィールドの設定</h3>
+      <h3>ラベルフィールドの設定</h3>
+      <small style={{ display: 'block', marginBottom: '16px' }}>
+        ラベルはキー情報を持たないため、少しでもラベルに変更があると、表示・非表示の設定から外れてしまいます。
+      </small>
       <div className='form'>
         <div className='left'>
-          <RadioGroup defaultValue='sub' value={spaceDisplayMode} onChange={onDisplayModeChange}>
-            <FormControlLabel value='add' control={<Radio />} label='指定したスペースだけ表示' />
-            <FormControlLabel value='sub' control={<Radio />} label='指定したスペースを非表示' />
+          <RadioGroup defaultValue='sub' value={labelDisplayMode} onChange={onDisplayModeChange}>
+            <FormControlLabel value='add' control={<Radio />} label='指定したラベルだけ表示' />
+            <FormControlLabel value='sub' control={<Radio />} label='指定したラベルを非表示' />
           </RadioGroup>
         </div>
         <div className='right'>
-          <h3>{spaceDisplayMode === 'add' ? '表示する' : '表示しない'}スペース</h3>
+          <h3>{labelDisplayMode === 'add' ? '表示する' : '表示しない'}ラベル</h3>
           <div className='rows'>
-            {spaceIds.map((spaceId, i) => (
+            {labels.map((label, i) => (
               <div key={i}>
                 <Autocomplete
-                  value={appSpaces.find((spacer) => spacer.elementId === spaceId) ?? null}
+                  value={label}
                   sx={{ width: '350px' }}
-                  options={appSpaces}
-                  isOptionEqualToValue={(option, v) => option.elementId === v.elementId}
-                  getOptionLabel={(option) => option.elementId}
-                  onChange={(_, group) => onSpaceIdChange(i, group?.elementId ?? '')}
+                  options={allLabels}
+                  onChange={(_, lbl) => onLabelsChange(i, lbl ?? '')}
                   renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='対象スペースID'
-                      variant='outlined'
-                      color='primary'
-                    />
+                    <TextField {...params} label='対象ラベル' variant='outlined' color='primary' />
                   )}
                 />
                 <Tooltip title='フィールドを追加する'>
-                  <IconButton size='small' onClick={() => addSpaceId(i)}>
+                  <IconButton size='small' onClick={() => addLabel(i)}>
                     <AddIcon fontSize='small' />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title='このフィールドを削除する'>
-                  <IconButton size='small' onClick={() => removeSpaceId(i)}>
+                  <IconButton size='small' onClick={() => removeLabel(i)}>
                     <DeleteIcon fontSize='small' />
                   </IconButton>
                 </Tooltip>
@@ -120,8 +116,7 @@ const Component: FCX<Props> = ({ className, conditionIndex }) => {
 };
 
 const StyledComponent = styled(Component)`
-  border-left: 2px solid #0003;
-  padding: 8px 8px 8px 16px;
+  padding: 8px;
 
   .form {
     display: flex;
@@ -137,7 +132,7 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-const Container: FC<Props> = (props) => {
+const Container: FC = (props) => {
   return (
     <Suspense
       fallback={

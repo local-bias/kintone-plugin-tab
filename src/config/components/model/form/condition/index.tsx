@@ -1,41 +1,46 @@
 import React, { FC, FCX } from 'react';
 import styled from '@emotion/styled';
 
+import { useConditionIndex } from '../../../condition-index-provider';
+import { useRecoilValue } from 'recoil';
+import { tabIndexState } from '../../../../states/plugin';
+
 import TabNameForm from './form-tabname';
 import FieldForm from './form-fields';
 import GroupForm from './form-groups';
 import SpaceForm from './form-spaces';
 import LabelForm from './form-labels';
 import HRForm from './form-hr';
+import ConditionDeletionButton from './condition-deletion-button';
 
-type ContainerProps = { condition: kintone.plugin.Condition; index: number };
-type Props = ContainerProps & {};
-
-const Component: FCX<Props> = (props) => (
-  <div className={props.className}>
-    <div>
-      <h3>タブ情報</h3>
-      <div className='form-components'>
-        <TabNameForm conditionIndex={props.index} />
+const Component: FCX = ({ className }) => {
+  return (
+    <div className={className}>
+      <div>
+        <h3>タブ情報</h3>
+        <div className='form-components'>
+          <TabNameForm />
+        </div>
       </div>
+      <FieldForm />
+      <GroupForm />
+      <SpaceForm />
+      <LabelForm />
+      <HRForm />
+      <ConditionDeletionButton />
     </div>
-    <FieldForm conditionIndex={props.index} />
-    <GroupForm conditionIndex={props.index} />
-    <SpaceForm conditionIndex={props.index} />
-    <LabelForm conditionIndex={props.index} />
-    <HRForm conditionIndex={props.index} />
-  </div>
-);
+  );
+};
 
 const StyledComponent = styled(Component)`
   padding: 0 16px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 16px;
 
   > div {
-    padding: 8px 8px 8px 16px;
-    border-left: 2px solid #0002;
+    padding: 8px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -75,8 +80,10 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-const Container: FC<ContainerProps> = (props) => {
-  return <StyledComponent {...props} />;
+const Container: FC = () => {
+  const conditionIndex = useConditionIndex();
+  const tabIndex = useRecoilValue(tabIndexState);
+  return conditionIndex === tabIndex ? <StyledComponent /> : null;
 };
 
 export default Container;
