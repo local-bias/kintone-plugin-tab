@@ -5,7 +5,7 @@ const REPO = 'https://cdn.jsdelivr.net/gh/local-bias/kintone-plugin-tab@latest';
 const localhost = 'https://127.0.0.1:5500';
 
 /** @type { import('./src/types/plugin-config').PluginConfig } */
-module.exports = {
+export default {
   manifest: {
     base: {
       manifest_version: 1,
@@ -21,7 +21,7 @@ module.exports = {
         ja: 'スクロールに追従する垂直方向のタブを追加します',
         zh: '添加垂直标签',
       },
-      icon: 'image/icon.png',
+      icon: 'icon.png',
       homepage_url: { ja: hp, en: hp },
       desktop: { js: [`${commonCdn}/dist/desktop.js`], css: [] },
       mobile: { js: [`${commonCdn}/dist/desktop.js`], css: [] },
