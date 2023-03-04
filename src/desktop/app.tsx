@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { RecoilRoot } from 'recoil';
 
-import { PluginErrorBoundary } from '@common/components/error-boundary';
+import { PluginErrorBoundary } from '@/common/components/error-boundary';
 
 import { pluginConfigState } from './states';
 import Tab from './tab';

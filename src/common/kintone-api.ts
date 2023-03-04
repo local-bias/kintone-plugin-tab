@@ -1,9 +1,9 @@
 import { KintoneRestAPIClient } from '@kintone/rest-api-client';
-import { kx } from '@type/kintone.api';
+import { kintoneAPI } from '@konomi-app/kintone-utilities';
 import { getAppId } from '@lb-ribbit/kintone-xapp';
 
 /** kintoneアプリに初期状態で存在するフィールドタイプ */
-const DEFAULT_DEFINED_FIELDS: kx.FieldPropertyType[] = [
+const DEFAULT_DEFINED_FIELDS: kintoneAPI.FieldPropertyType[] = [
   'RECORD_NUMBER',
   'UPDATED_TIME',
   'CREATOR',
@@ -35,7 +35,7 @@ export const kintoneClient = new FlexKintone();
 
 export const getFieldProperties = async (
   targetApp?: string | number
-): Promise<kx.FieldProperties> => {
+): Promise<kintoneAPI.FieldProperties> => {
   const app = targetApp || kintone.app.getId();
 
   if (!app) {
@@ -47,16 +47,16 @@ export const getFieldProperties = async (
   return properties;
 };
 
-export const getUserDefinedFields = async (): Promise<kx.FieldProperties> => {
+export const getUserDefinedFields = async (): Promise<kintoneAPI.FieldProperties> => {
   const properties = await getFieldProperties();
   return omitFieldProperties(properties, DEFAULT_DEFINED_FIELDS);
 };
 
 /** サブテーブルをばらしてフィールドを返却します */
-export const getAllFields = async (): Promise<kx.FieldProperty[]> => {
+export const getAllFields = async (): Promise<kintoneAPI.FieldProperty[]> => {
   const properties = await getFieldProperties();
 
-  const fields = Object.values(properties).reduce<kx.FieldProperty[]>((acc, property) => {
+  const fields = Object.values(properties).reduce<kintoneAPI.FieldProperty[]>((acc, property) => {
     if (property.type === 'SUBTABLE') {
       return [...acc, ...Object.values(property.fields)];
     }
@@ -66,7 +66,7 @@ export const getAllFields = async (): Promise<kx.FieldProperty[]> => {
   return fields;
 };
 
-export const getAppLayout = async (_app?: number): Promise<kx.Layout> => {
+export const getAppLayout = async (_app?: number): Promise<kintoneAPI.Layout> => {
   const app = _app || getAppId();
 
   if (!app) {
@@ -78,8 +78,8 @@ export const getAppLayout = async (_app?: number): Promise<kx.Layout> => {
   return layout;
 };
 
-export const flatLayout = (layout: kx.Layout): kx.layout.Field[] => {
-  const results: kx.layout.Field[] = [];
+export const flatLayout = (layout: kintoneAPI.Layout): kintoneAPI.LayoutField[] => {
+  const results: kintoneAPI.LayoutField[] = [];
   for (const chunk of layout) {
     if (chunk.type === 'ROW') {
       results.push(...flatLayoutRow(chunk));
@@ -93,15 +93,15 @@ export const flatLayout = (layout: kx.Layout): kx.layout.Field[] => {
   return results;
 };
 
-export const flatLayoutRow = (row: kx.layout.Row): kx.layout.Field[] => {
-  return row.fields.reduce<kx.layout.Field[]>((acc, field) => [...acc, field], []);
+export const flatLayoutRow = (row: kintoneAPI.layout.Row): kintoneAPI.LayoutField[] => {
+  return row.fields.reduce<kintoneAPI.LayoutField[]>((acc, field) => [...acc, field], []);
 };
 
 /** 指定のフィールドコードのフィールドを操作します */
 export const controlField = (
-  record: kx.RecordData,
+  record: kintoneAPI.RecordData,
   fieldCode: string,
-  callback: (field: kx.Field) => void
+  callback: (field: kintoneAPI.Field) => void
 ): void => {
   if (record[fieldCode]) {
     callback(record[fieldCode]);
@@ -127,12 +127,12 @@ export const controlField = (
  * @returns 条件に当てはまるフィールド
  */
 export const filterFieldProperties = (
-  properties: kx.FieldProperties,
-  callback: (field: kx.FieldProperty) => boolean
-): kx.FieldProperties => {
+  properties: kintoneAPI.FieldProperties,
+  callback: (field: kintoneAPI.FieldProperty) => boolean
+): kintoneAPI.FieldProperties => {
   const filtered = Object.entries(properties).filter(([_, value]) => callback(value));
 
-  const reduced = filtered.reduce<kx.FieldProperties>(
+  const reduced = filtered.reduce<kintoneAPI.FieldProperties>(
     (acc, [key, value]) => ({ ...acc, [key]: value }),
     {}
   );
@@ -148,18 +148,18 @@ export const filterFieldProperties = (
  * @returns 指定したフィールドタイプを除いた一覧
  */
 export const omitFieldProperties = (
-  properties: kx.FieldProperties,
-  omittingTypes: kx.FieldPropertyType[]
-): kx.FieldProperties => {
+  properties: kintoneAPI.FieldProperties,
+  omittingTypes: kintoneAPI.FieldPropertyType[]
+): kintoneAPI.FieldProperties => {
   return filterFieldProperties(properties, (property) => !omittingTypes.includes(property.type));
 };
 
 /** 対象レコードの各フィールドから、指定文字列に一致するフィールドが１つでもあればTrueを返します */
-export const someRecord = (record: kx.RecordData, searchValue: string): boolean => {
+export const someRecord = (record: kintoneAPI.RecordData, searchValue: string): boolean => {
   return Object.values(record).some((field) => someFieldValue(field, searchValue));
 };
 
-export const someFieldValue = (field: kx.RecordData[string], searchValue: string) => {
+export const someFieldValue = (field: kintoneAPI.RecordData[string], searchValue: string) => {
   switch (field.type) {
     case 'CREATOR':
     case 'MODIFIER':

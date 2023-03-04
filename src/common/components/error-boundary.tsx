@@ -1,7 +1,7 @@
 import React, { FC, FCX } from 'react';
 import styled from '@emotion/styled';
 import { Button } from '@mui/material';
-import { URL_HOMEPAGE } from '@common/static';
+import { URL_HOMEPAGE } from '@/common/static';
 import { ErrorBoundary as SentryBoundary } from '@sentry/react';
 
 const Component: FCX<{ error: Error; resetError: () => void }> = ({

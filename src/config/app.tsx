@@ -2,8 +2,8 @@ import React, { Suspense, FC } from 'react';
 import { RecoilRoot } from 'recoil';
 import { SnackbarProvider } from 'notistack';
 
-import { restoreStorage } from '@common/plugin';
-import { PluginErrorBoundary } from '@common/components/error-boundary';
+import { restoreStorage } from '@/common/plugin';
+import { PluginErrorBoundary } from '@/common/components/error-boundary';
 
 import Layout from './components/model/layout';
 import Sidebar from './components/model/sidebar';
@@ -12,8 +12,8 @@ import Footer from './components/model/footer';
 
 import { pluginIdState } from './states';
 import { storageState } from './states/plugin';
-import { Loading } from '@common/components/loading';
-import { URL_PROMOTION } from '@common/static';
+import { Loading } from '@/common/components/loading';
+import { URL_PROMOTION } from '@/common/static';
 
 const Component: FC<{ pluginId: string }> = ({ pluginId }) => (
   <>
