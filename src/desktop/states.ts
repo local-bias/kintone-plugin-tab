@@ -1,5 +1,6 @@
-import { flatLayout, getAppLayout } from '@/common/kintone-api';
+import { flatLayout, getAppLayout, kintoneClient } from '@/common/kintone-api';
 import { kintoneAPI } from '@konomi-app/kintone-utilities';
+import { getAppId } from '@lb-ribbit/kintone-xapp';
 import { atom, selector } from 'recoil';
 
 const PREFIX = `DesktopState`;
@@ -14,12 +15,20 @@ export const tabIndexState = atom<number>({
   default: 0,
 });
 
-export const appLayoutState = selector<kintoneAPI.Layout>({
+export const appLayoutState = atom<kintoneAPI.Layout>({
   key: `${PREFIX}appLayoutState`,
-  get: async () => {
+  default: (async () => {
     const layout = await getAppLayout();
     return layout;
-  },
+  })(),
+});
+
+export const appFieldsState = atom<kintoneAPI.FieldProperties>({
+  key: `${PREFIX}appFieldsState`,
+  default: (async () => {
+    const { properties } = await kintoneClient.app.getFormFields({ app: getAppId()! });
+    return properties;
+  })(),
 });
 
 export const appGroupsState = selector<kintoneAPI.layout.Group[]>({

@@ -2,8 +2,14 @@ import React, { FC, FCX } from 'react';
 import styled from '@emotion/styled';
 import { Tab, Tabs } from '@mui/material';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { appGroupsState, appSpacesState, pluginConfigState, tabIndexState } from './states';
-import { getCurrentRecord, getSpaceElement, setFieldShown } from '@lb-ribbit/kintone-xapp';
+import {
+  appFieldsState,
+  appGroupsState,
+  appSpacesState,
+  pluginConfigState,
+  tabIndexState,
+} from './states';
+import { getSpaceElement, setFieldShown } from '@lb-ribbit/kintone-xapp';
 
 const TabComponent: FC = () => {
   const storage = useRecoilValue(pluginConfigState)!;
@@ -14,20 +20,19 @@ const TabComponent: FC = () => {
       async (_: any, index: number) => {
         set(tabIndexState, index);
         const storage = await snapshot.getPromise(pluginConfigState);
+        const fieldProperties = await snapshot.getPromise(appFieldsState);
 
         if (!storage || !storage.conditions[index]) {
           return;
         }
 
-        const { record } = getCurrentRecord();
-
-        Object.keys(record).forEach((code) => {
+        Object.keys(fieldProperties).forEach((code) => {
           setFieldShown(code, true);
         });
 
         const condition = storage.conditions[index];
 
-        for (const code of Object.keys(record)) {
+        for (const code of Object.keys(fieldProperties)) {
           const exists = condition.fields.includes(code);
           setFieldShown(code, condition.displayMode === 'sub' ? !exists : exists);
         }
