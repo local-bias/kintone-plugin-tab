@@ -1,10 +1,10 @@
 {
   "name": "kintone-plugin-tab",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "author": "ribbit",
   "license": "MIT",
   "scripts": {
-    "build": "ts-node scripts/marge-json.ts prod && kbuild --mode plugin --env prod && kintone-plugin-packer --out dist/plugin-prod.zip --ppk dist/private.ppk plugin",
+    "build": "ts-node scripts/marge-json.mjs prod && kbuild --mode plugin --env prod && kintone-plugin-packer --out dist/plugin-prod.zip --ppk dist/private.ppk plugin",
     "dev": "node scripts/marge-json.mjs dev && kintone-plugin-packer --out dist/plugin-dev.zip --ppk dist/private.ppk plugin && concurrently \"yarn:dev:*\"",
     "dev:js": "kbuild --mode plugin --env dev",
     "dev:upload": "node scripts/upload.mjs",

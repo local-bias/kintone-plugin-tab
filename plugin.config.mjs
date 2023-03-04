@@ -9,7 +9,7 @@ export default {
   manifest: {
     base: {
       manifest_version: 1,
-      version: 240,
+      version: '2.5.0',
       type: 'APP',
       name: {
         en: 'vertical tab plugin',
