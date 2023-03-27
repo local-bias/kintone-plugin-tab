@@ -502,7 +502,7 @@
     os-locale "^5.0.0"
     puppeteer "^19.7.5"
 
-"@kintone/rest-api-client@3.3.6":
+"@kintone/rest-api-client@3.3.6", "@kintone/rest-api-client@^3.3.5":
   version "3.3.6"
   resolved "https://registry.yarnpkg.com/@kintone/rest-api-client/-/rest-api-client-3.3.6.tgz#74293599b8cdaec9c8b6cb4d46b27dfe5b4e6a0d"
   integrity sha512-0KZOS2wAkP2n4l/4r8fqlDm2brkcaSEK9CeTyQ3HRX5q8oKFc4vQxSCn245J1yd5ELOt9v8Yz6ZE9HnFVsJsxg==
@@ -522,18 +522,6 @@
     core-js "^3.25.5"
     form-data "^4.0.0"
     js-base64 "^3.7.2"
-    qs "^6.10.5"
-
-"@kintone/rest-api-client@^3.3.4":
-  version "3.3.5"
-  resolved "https://registry.yarnpkg.com/@kintone/rest-api-client/-/rest-api-client-3.3.5.tgz#e5e0f1f6d8cdc5ab6a787314b795b8c9f03a3448"
-  integrity sha512-wHDvvFp88oLsK6C1/1VLn6IzdkrtCc91ZIzKaSDewuLlowYL0Ze+IgiP1auCq/oMSvB1T6dcDs0PpFLCl5Z9HA==
-  dependencies:
-    axios "^0.27.2"
-    core-js "^3.29.0"
-    form-data "^4.0.0"
-    js-base64 "^3.7.5"
-    mime "^3.0.0"
     qs "^6.10.5"
 
 "@kintone/webpack-plugin-kintone-plugin@6.0.29":
@@ -560,12 +548,12 @@
     webpack "^5.76.2"
 
 "@konomi-app/kintone-utilities@^1.4.0":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@konomi-app/kintone-utilities/-/kintone-utilities-1.9.1.tgz#1ba8d63baf0d1199a23eb9dbf0f49dd01c3fd432"
-  integrity sha512-xlLk2wwwXMzDXZOYoh/oR4JPMsCR/iZTKuLkVF0tcK6MARf8YMa6hgHtFIOuShLiMgUh3HDb1q8zl9EThCADNA==
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/@konomi-app/kintone-utilities/-/kintone-utilities-1.10.1.tgz#31964cf99243b850a62b32d8ec3d0080f3dbc013"
+  integrity sha512-ZWN9V7xcGbi2AA6kEXnr0oa1swFim3krs6JlWOZzWqtjxauijwcDcd5LSXWTnEGjX71VwJk9agiAJQgmx5C0VA==
   dependencies:
     "@emotion/css" "^11.10.6"
-    "@kintone/rest-api-client" "^3.3.4"
+    "@kintone/rest-api-client" "^3.3.5"
 
 "@lb-ribbit/kintone-xapp@0.4.0":
   version "0.4.0"
@@ -1683,7 +1671,7 @@ core-js@^3.25.5:
   version "3.26.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.26.1.tgz#7a9816dabd9ee846c1c0fe0e8fcad68f3709134e"
 
-core-js@^3.29.0, core-js@^3.29.1:
+core-js@^3.29.1:
   version "3.29.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.29.1.tgz#40ff3b41588b091aaed19ca1aa5cb111803fa9a6"
   integrity sha512-+jwgnhg6cQxKYIIjGtAHq2nwUOolo9eoFZ4sHfUH09BLXBgxnH4gA0zEd+t+BO2cNB8idaBtZFcFTRjQJRJmAw==
@@ -3773,6 +3761,7 @@ redent@^3.0.0:
 regenerator-runtime@^0.13.10, regenerator-runtime@^0.13.11:
   version "0.13.11"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
+  integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
 
 regexp.prototype.flags@^1.4.3:
   version "1.4.3"
