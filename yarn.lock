@@ -630,7 +630,7 @@
     os-locale "^5.0.0"
     puppeteer "^19.7.5"
 
-"@kintone/rest-api-client@3.3.11":
+"@kintone/rest-api-client@3.3.11", "@kintone/rest-api-client@^3.3.10":
   version "3.3.11"
   resolved "https://registry.yarnpkg.com/@kintone/rest-api-client/-/rest-api-client-3.3.11.tgz#b01d5d8714bfdca40ed2d8fcb3dfab0d6a5fc62b"
   integrity sha512-tn0UVo8YyAxWBLeXOkv0lZcEUflH6DJKm1/JpY6zYU59ckekkc4PyHXicKvdrhpjW+KgcxknGCNr43hP3Oy16A==
@@ -650,18 +650,6 @@
     core-js "^3.25.5"
     form-data "^4.0.0"
     js-base64 "^3.7.2"
-    qs "^6.10.5"
-
-"@kintone/rest-api-client@^3.3.6":
-  version "3.3.9"
-  resolved "https://registry.yarnpkg.com/@kintone/rest-api-client/-/rest-api-client-3.3.9.tgz#aa9803282f7c2d402135e63c91034e84a52a6aaf"
-  integrity sha512-6b7xD/VaHteFq7rv2TYH9uwu+yz+KkAAiFwqHv6rp2Tg9YLY5RNu+s+OSWuUhMSJ95nH1iesXqjTuSX/FZtgxQ==
-  dependencies:
-    axios "^0.27.2"
-    core-js "^3.29.1"
-    form-data "^4.0.0"
-    js-base64 "^3.7.5"
-    mime "^3.0.0"
     qs "^6.10.5"
 
 "@kintone/webpack-plugin-kintone-plugin@6.0.35":
@@ -687,13 +675,13 @@
     typescript "^5.0.3"
     webpack "^5.77.0"
 
-"@konomi-app/kintone-utilities@^1.4.0":
-  version "1.26.1"
-  resolved "https://registry.yarnpkg.com/@konomi-app/kintone-utilities/-/kintone-utilities-1.26.1.tgz#f923e03c260af090acba3599a4f8924b8801e059"
-  integrity sha512-xyT++/rpZixg9ya+TwlWreItgUNTW/UD/X2iNFLRMKARTdII4WfHrCooToOevAIRrK2ZXSv6pYSerMyGT2QgJQ==
+"@konomi-app/kintone-utilities@^2.0.0":
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/@konomi-app/kintone-utilities/-/kintone-utilities-2.5.3.tgz#1ca92aa068dfcb7b489268cc9c88873436c1293e"
+  integrity sha512-lctb3oc3B5AfssbcgO0n8wGh3QSCi+hVFWBrE0H0HocCWw14pG8sKe4y0eSOp2gZBoWbpBKkgzxA5yoHv99pjg==
   dependencies:
     "@emotion/css" "^11.10.6"
-    "@kintone/rest-api-client" "^3.3.6"
+    "@kintone/rest-api-client" "^3.3.10"
 
 "@lb-ribbit/kintone-xapp@0.4.0":
   version "0.4.0"
