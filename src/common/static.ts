@@ -6,3 +6,4 @@ export const LOCAL_STORAGE_KEY = 'ribbit-kintone-plugin';
 
 export const URL_HOMEPAGE = manifest.homepage_url.ja;
 export const URL_PROMOTION = 'https://promotion.konomi.app/kintone-plugin';
+export const URL_INQUIRY = 'https://form.konomi.app';

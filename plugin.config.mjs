@@ -2,14 +2,14 @@
 const hp = 'https://konomi.app/';
 const commonCdn = 'https://cdn.jsdelivr.net/gh/local-bias/kintone-cdn@latest';
 const REPO = 'https://cdn.jsdelivr.net/gh/local-bias/kintone-plugin-tab@latest';
-const localhost = 'https://127.0.0.1:5500';
+const localhost = 'https://127.0.0.1:6327';
 
-/** @type { import('./src/types/plugin-config').PluginConfig } */
+/** @type { import('@konomi-app/kintone-utilities').PluginConfig } */
 export default {
   manifest: {
     base: {
       manifest_version: 1,
-      version: '2.5.0',
+      version: '2.6.0',
       type: 'APP',
       name: {
         en: 'vertical tab plugin',

@@ -1,6 +1,7 @@
 import { KintoneRestAPIClient } from '@kintone/rest-api-client';
-import { kintoneAPI } from '@konomi-app/kintone-utilities';
+import { getFormLayout, kintoneAPI } from '@konomi-app/kintone-utilities';
 import { getAppId } from '@lb-ribbit/kintone-xapp';
+import { GUEST_SPACE_ID } from './global';
 
 /** kintoneアプリに初期状態で存在するフィールドタイプ */
 const DEFAULT_DEFINED_FIELDS: kintoneAPI.FieldPropertyType[] = [
@@ -73,7 +74,7 @@ export const getAppLayout = async (_app?: number): Promise<kintoneAPI.Layout> =>
     throw new Error('アプリのフィールド情報が取得できませんでした');
   }
 
-  const { layout } = await kintoneClient.app.getFormLayout({ app });
+  const { layout } = await getFormLayout({ app, guestSpaceId: GUEST_SPACE_ID });
 
   return layout;
 };

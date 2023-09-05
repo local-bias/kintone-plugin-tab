@@ -4,42 +4,58 @@ import { css } from '@emotion/css';
 import { restoreStorage } from '@/common/plugin';
 
 import App from './app';
+import { KintoneEventListener, getFormFields, getFormLayout } from '@konomi-app/kintone-utilities';
+import { GUEST_SPACE_ID, PLUGIN_ID } from '@/common/global';
+import { getAppId } from '@lb-ribbit/kintone-xapp';
+import { refresh } from './actions';
 
 const ROOT_ID = 'ribbit-tab-plugin-root';
 
-const events: kintone.EventType[] = [
-  'app.record.create.show',
-  'app.record.edit.show',
-  'app.record.detail.show',
-];
+export default (listener: KintoneEventListener) => {
+  listener.add(
+    ['app.record.create.show', 'app.record.edit.show', 'app.record.detail.show'],
+    async (event) => {
+      const config = restoreStorage(PLUGIN_ID);
+      if (!config?.conditions?.length) {
+        return event;
+      }
+      const app = getAppId()!;
+      const { properties } = await getFormFields({
+        app,
+        guestSpaceId: GUEST_SPACE_ID,
+        debug: process.env.NODE_ENV === 'development',
+      });
+      const { layout } = await getFormLayout({
+        app,
+        guestSpaceId: GUEST_SPACE_ID,
+        debug: process.env.NODE_ENV === 'development',
+      });
+      refresh({ condition: config.conditions[0], fieldProperties: properties, layout });
+      if (document.getElementById(ROOT_ID)) {
+        return event;
+      }
 
-const enables: launcher.Enables = (e) => !document.getElementById(ROOT_ID);
+      const target = document.querySelector('#record-gaia');
 
-const action: launcher.Action = async (event, pluginId) => {
-  const config = restoreStorage(pluginId);
-  process.env.NODE_ENV === 'development' && console.log({ config });
+      if (!target) {
+        console.log('タブをレンダリングする対象エレメントが取得できませんでした');
+        return event;
+      }
 
-  const target = document.querySelector('#record-gaia');
+      target.classList.add(css`
+        padding: 0 !important;
+        display: flex;
+        gap: 8px;
+      `);
 
-  if (!target) {
-    console.log('タブをレンダリングする対象エレメントが取得できませんでした');
-    return event;
-  }
+      const div = document.createElement('div');
+      div.id = ROOT_ID;
 
-  target.classList.add(css`
-    padding: 0 !important;
-    display: flex;
-    gap: 8px;
-  `);
+      target.prepend(div);
 
-  const div = document.createElement('div');
-  div.id = ROOT_ID;
+      createRoot(div).render(<App properties={properties} layout={layout} />);
 
-  target.prepend(div);
-
-  createRoot(div).render(<App config={config} />);
-
-  return event;
+      return event;
+    }
+  );
 };
-
-export default { events, enables, action };

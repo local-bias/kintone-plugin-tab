@@ -2,14 +2,8 @@ import React, { FC, FCX } from 'react';
 import styled from '@emotion/styled';
 import { Tab, Tabs } from '@mui/material';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import {
-  appFieldsState,
-  appGroupsState,
-  appSpacesState,
-  pluginConfigState,
-  tabIndexState,
-} from './states';
-import { getSpaceElement, setFieldShown } from '@lb-ribbit/kintone-xapp';
+import { appFieldsState, appLayoutState, pluginConfigState, tabIndexState } from './states';
+import { refresh } from './actions';
 
 const TabComponent: FC = () => {
   const storage = useRecoilValue(pluginConfigState)!;
@@ -20,68 +14,16 @@ const TabComponent: FC = () => {
       async (_: any, index: number) => {
         set(tabIndexState, index);
         const storage = await snapshot.getPromise(pluginConfigState);
-        const fieldProperties = await snapshot.getPromise(appFieldsState);
 
         if (!storage || !storage.conditions[index]) {
           return;
         }
 
-        Object.keys(fieldProperties).forEach((code) => {
-          setFieldShown(code, true);
-        });
-
         const condition = storage.conditions[index];
+        const fieldProperties = (await snapshot.getPromise(appFieldsState))!;
+        const layout = (await snapshot.getPromise(appLayoutState))!;
 
-        for (const code of Object.keys(fieldProperties)) {
-          const exists = condition.fields.includes(code);
-          setFieldShown(code, condition.displayMode === 'sub' ? !exists : exists);
-        }
-
-        const { groups = [], groupDisplayMode = 'sub' } = condition;
-        const allGroups = await snapshot.getPromise(appGroupsState);
-        for (const group of allGroups) {
-          const exists = groups.includes(group.code);
-          setFieldShown(group.code, groupDisplayMode === 'sub' ? !exists : exists);
-        }
-
-        const { spaceIds = [], spaceDisplayMode } = condition;
-        const allSpaces = await snapshot.getPromise(appSpacesState);
-        for (const space of allSpaces) {
-          const exists = spaceIds.includes(space.elementId);
-          const spaceElement = getSpaceElement(space.elementId);
-          if (!spaceElement) {
-            continue;
-          }
-          const spaceWrapper = spaceElement.parentElement;
-          if (!spaceWrapper) {
-            continue;
-          }
-          if ((spaceDisplayMode === 'sub' && exists) || (spaceDisplayMode === 'add' && !exists)) {
-            spaceWrapper.style.display = 'none';
-          } else {
-            spaceWrapper.style.display = 'block';
-          }
-        }
-
-        const { labels = [], labelDisplayMode = 'sub' } = condition;
-        const labelElements = [
-          ...Array.from(document.querySelectorAll<HTMLDivElement>('.control-label-field-gaia')),
-          ...Array.from(document.querySelectorAll<HTMLDivElement>('.control-value-label-gaia')),
-        ];
-
-        for (const labelElement of labelElements) {
-          const text = labelElement.textContent;
-          const exists = text && labels.some((label) => label === text);
-          if ((labelDisplayMode === 'sub' && exists) || (labelDisplayMode === 'add' && !exists)) {
-            labelElement.style.display = 'none';
-          } else {
-            labelElement.style.display = 'block';
-          }
-        }
-
-        const { hidesHR = false } = condition;
-        const hrElements = document.querySelectorAll<HTMLHRElement>('.hr-cybozu');
-        hrElements.forEach((el) => (el.style.display = hidesHR ? 'none' : 'block'));
+        refresh({ condition, fieldProperties, layout });
       },
     []
   );
