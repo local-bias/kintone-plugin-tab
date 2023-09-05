@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { FormControlLabel, IconButton, Radio, RadioGroup, Skeleton, Tooltip } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import React, { FC, FCX, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { fieldDisplayModeState, fieldsState } from '../../../../states/plugin';

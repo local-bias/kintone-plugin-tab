@@ -1,7 +1,7 @@
 import React, { FC, FCX, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import styled from '@emotion/styled';
-import produce from 'immer';
+import { produce } from 'immer';
 import {
   Autocomplete,
   FormControlLabel,

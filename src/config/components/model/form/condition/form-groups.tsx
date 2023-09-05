@@ -9,7 +9,7 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import React, { FC, FCX, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import AddIcon from '@mui/icons-material/Add';
