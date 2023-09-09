@@ -1,7 +1,8 @@
 import { selector } from 'recoil';
 import { getAppId } from '@lb-ribbit/kintone-xapp';
-import { flatLayout, kintoneClient } from '@/common/kintone-api';
-import { kintoneAPI } from '@konomi-app/kintone-utilities';
+import { flatLayout } from '@/common/kintone-api';
+import { getFormFields, getFormLayout, kintoneAPI } from '@konomi-app/kintone-utilities';
+import { GUEST_SPACE_ID } from '@/common/global';
 
 const PREFIX = `kintone`;
 
@@ -13,7 +14,12 @@ export const appFieldsState = selector<kintoneAPI.FieldProperty[]>({
       throw new Error('アプリのフィールド情報が取得できませんでした');
     }
 
-    const { properties } = await kintoneClient.app.getFormFields({ app, preview: true });
+    const { properties } = await getFormFields({
+      app,
+      preview: true,
+      guestSpaceId: GUEST_SPACE_ID,
+      debug: process.env.NODE_ENV === 'development',
+    });
 
     const values = Object.values(properties);
 
@@ -29,7 +35,12 @@ export const appLayoutState = selector<kintoneAPI.Layout>({
       throw new Error('アプリのフィールド情報が取得できませんでした');
     }
 
-    const { layout } = await kintoneClient.app.getFormLayout({ app, preview: true });
+    const { layout } = await getFormLayout({
+      app,
+      preview: true,
+      guestSpaceId: GUEST_SPACE_ID,
+      debug: process.env.NODE_ENV === 'development',
+    });
     return layout;
   },
 });
