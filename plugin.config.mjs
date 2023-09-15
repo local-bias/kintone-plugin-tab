@@ -1,7 +1,6 @@
 //@ts-check
 const hp = 'https://konomi.app/';
 const commonCdn = 'https://cdn.jsdelivr.net/gh/local-bias/kintone-cdn@latest';
-const REPO = 'https://cdn.jsdelivr.net/gh/local-bias/kintone-plugin-tab@latest';
 const localhost = 'https://127.0.0.1:6327';
 
 /** @type { import('@konomi-app/kintone-utilities').PluginConfig } */
@@ -33,14 +32,23 @@ export default {
       },
     },
     dev: {
-      desktop: { js: [`${localhost}/dist/dev/desktop/index.js`] },
-      mobile: { js: [`${localhost}/dist/dev/desktop/index.js`] },
-      config: { js: [`${localhost}/dist/dev/config/index.js`] },
+      desktop: {
+        js: [`${localhost}/dist/dev/desktop/index.js`],
+        css: [`${localhost}/dist/dev/desktop.css`],
+      },
+      mobile: {
+        js: [`${localhost}/dist/dev/desktop/index.js`],
+        css: [`${localhost}/dist/dev/desktop.css`],
+      },
+      config: {
+        js: [`${localhost}/dist/dev/config/index.js`],
+        css: [`${localhost}/dist/dev/config.css`],
+      },
     },
     prod: {
-      desktop: { js: [`${REPO}/cdn/desktop.js`], css: [`${REPO}/cdn/desktop.css`] },
-      mobile: { js: [`${REPO}/cdn/desktop.js`], css: [`${REPO}/cdn/desktop.css`] },
-      config: { js: [`${REPO}/cdn/config.js`], css: [`${REPO}/cdn/config.css`] },
+      desktop: { js: [`desktop.js`], css: [`desktop.css`] },
+      mobile: { js: [`desktop.js`], css: [`desktop.css`] },
+      config: { js: [`config.js`], css: [`config.css`] },
     },
   },
 };
