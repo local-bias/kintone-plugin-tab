@@ -5,6 +5,11 @@ import { atom, selector, selectorFamily } from 'recoil';
 
 const PREFIX = 'plugin';
 
+export const loadingState = atom<boolean>({
+  key: `${PREFIX}loadingState`,
+  default: false,
+});
+
 const updated = <T extends keyof kintone.plugin.Condition>(
   storage: kintone.plugin.Storage,
   props: {
