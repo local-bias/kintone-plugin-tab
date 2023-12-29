@@ -5,6 +5,7 @@ const localhost = 'https://127.0.0.1:6327';
 
 /** @type { import('@konomi-app/kintone-utilities').PluginConfig } */
 export default {
+  id: 'ribbit-kintone-plugin-tab',
   manifest: {
     base: {
       manifest_version: 1,
