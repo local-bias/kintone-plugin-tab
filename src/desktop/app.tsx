@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { RecoilRoot } from 'recoil';
 
-import { PluginErrorBoundary } from '@/common/components/error-boundary';
+import { PluginErrorBoundary } from '@/lib/components/error-boundary';
 
 import Tab from './tab';
 import { kintoneAPI } from '@konomi-app/kintone-utilities';

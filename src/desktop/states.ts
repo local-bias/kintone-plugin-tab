@@ -1,5 +1,5 @@
-import { PLUGIN_ID } from '@/common/global';
-import { restoreStorage } from '@/common/plugin';
+import { PLUGIN_ID } from '@/lib/global';
+import { restoreStorage } from '@/lib/plugin';
 import { kintoneAPI } from '@konomi-app/kintone-utilities';
 import { atom } from 'recoil';
 

@@ -1,4 +1,4 @@
-import { flatLayout } from '@/common/kintone-api';
+import { flatLayout } from '@/lib/kintone-api';
 import { kintoneAPI } from '@konomi-app/kintone-utilities';
 import { getSpaceElement, setFieldShown } from '@lb-ribbit/kintone-xapp';
 

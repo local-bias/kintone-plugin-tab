@@ -2,14 +2,14 @@ import React, { Suspense, FC } from 'react';
 import { RecoilRoot } from 'recoil';
 import { SnackbarProvider } from 'notistack';
 
-import { PluginErrorBoundary } from '@/common/components/error-boundary';
+import { PluginErrorBoundary } from '@/lib/components/error-boundary';
 
 import Layout from './components/model/layout';
 import Sidebar from './components/model/sidebar';
 import Form from './components/model/form';
 import Footer from './components/model/footer';
 
-import { URL_PROMOTION } from '@/common/static';
+import { URL_PROMOTION } from '@/lib/static';
 import { LoaderWithLabel } from '@konomi-app/ui-react';
 
 const Component: FC = () => (
