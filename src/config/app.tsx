@@ -9,8 +9,8 @@ import Sidebar from './components/model/sidebar';
 import Form from './components/model/form';
 import Footer from './components/model/footer';
 
-import { Loading } from '@/common/components/loading';
 import { URL_PROMOTION } from '@/common/static';
+import { LoaderWithLabel } from '@konomi-app/ui-react';
 
 const Component: FC = () => (
   <>
@@ -18,7 +18,7 @@ const Component: FC = () => (
       <PluginErrorBoundary>
         <SnackbarProvider maxSnack={1}>
           <Layout>
-            <Suspense fallback={<Loading label='設定情報を取得しています...' />}>
+            <Suspense fallback={<LoaderWithLabel label='設定情報を取得しています...' />}>
               <Sidebar />
               <Form />
               <Footer />
