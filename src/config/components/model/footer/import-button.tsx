@@ -3,7 +3,7 @@ import { useRecoilCallback } from 'recoil';
 import { useSnackbar } from 'notistack';
 import { storageState } from '../../../states/plugin';
 import { onFileLoad } from '@konomi-app/kintone-utilities';
-import { PluginConfigImportButton } from '@konomi-app/kintone-utility-component';
+import { PluginConfigImportButton } from '@konomi-app/kintone-utilities-react';
 
 const Component: FC = () => {
   const { enqueueSnackbar } = useSnackbar();
