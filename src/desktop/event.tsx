@@ -8,11 +8,11 @@ import { getFormFields, getFormLayout } from '@konomi-app/kintone-utilities';
 import { GUEST_SPACE_ID, PLUGIN_ID } from '@/common/global';
 import { getAppId } from '@lb-ribbit/kintone-xapp';
 import { refresh } from './actions';
-import { listener } from '@/common/listener';
+import { manager } from '@/common/listener';
 
 const ROOT_ID = 'ribbit-tab-plugin-root';
 
-listener.add(
+manager.add(
   ['app.record.create.show', 'app.record.edit.show', 'app.record.detail.show'],
   async (event) => {
     const config = restoreStorage(PLUGIN_ID);
