@@ -1,40 +1,26 @@
-import React, { FC } from 'react';
-import { useRecoilCallback } from 'recoil';
+import React, { FC, memo } from 'react';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { produce } from 'immer';
-import { Button } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-
-import { storageState } from '../../../../states/plugin';
-import { useConditionIndex } from '../../../condition-index-provider';
-
-type Props = Readonly<{ onClick: () => void }>;
-
-const Component: FC<Props> = ({ onClick }) => (
-  <Button
-    variant='outlined'
-    color='error'
-    onClick={onClick}
-    endIcon={<DeleteIcon fontSize='small' />}
-  >
-    この設定を削除する
-  </Button>
-);
+import { PluginConditionDeleteButton } from '@konomi-app/kintone-utilities-react';
+import { storageState, tabIndexState } from '@/config/states/plugin';
 
 const Container: FC = () => {
-  const index = useConditionIndex();
+  const index = useRecoilValue(tabIndexState);
+
   const onClick = useRecoilCallback(
     ({ set }) =>
-      () => {
+      async () => {
         set(storageState, (_, _storage = _!) =>
           produce(_storage, (draft) => {
             draft.conditions.splice(index, 1);
           })
         );
+        set(tabIndexState, (i) => (i === 0 ? i : i - 1));
       },
     [index]
   );
 
-  return <Component {...{ onClick }} />;
+  return <PluginConditionDeleteButton {...{ onClick }} />;
 };
 
-export default Container;
+export default memo(Container);

@@ -5,7 +5,6 @@ import {
   IconButton,
   Radio,
   RadioGroup,
-  Skeleton,
   TextField,
   Tooltip,
 } from '@mui/material';
@@ -14,51 +13,49 @@ import React, { FC, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useConditionIndex } from '../../../condition-index-provider';
 import { appSpacesState } from '../../../../states/kintone';
 import { spaceDisplayModeState, spaceIdsState } from '../../../../states/plugin';
 import { FormPlaceholder } from './form-placeholder';
 
 const Component: FC = () => {
-  const conditionIndex = useConditionIndex();
   const appSpaces = useRecoilValue(appSpacesState);
-  const spaceDisplayMode = useRecoilValue(spaceDisplayModeState(conditionIndex));
-  const spaceIds = useRecoilValue(spaceIdsState(conditionIndex));
+  const spaceDisplayMode = useRecoilValue(spaceDisplayModeState);
+  const spaceIds = useRecoilValue(spaceIdsState);
 
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(spaceDisplayModeState(conditionIndex), value as Plugin.DisplayMode);
+        set(spaceDisplayModeState, value as Plugin.DisplayMode);
       },
-    [conditionIndex]
+    []
   );
 
   const onSpaceIdChange = useRecoilCallback(
     ({ set }) =>
       (i: number, value: string) => {
-        set(spaceIdsState(conditionIndex), (current) =>
+        set(spaceIdsState, (current) =>
           produce(current, (draft) => {
             draft[i] = value;
           })
         );
       },
-    [conditionIndex]
+    []
   );
 
   const addSpaceId = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(spaceIdsState(conditionIndex), (current) =>
+        set(spaceIdsState, (current) =>
           produce(current, (draft) => {
             draft.splice(i + 1, 0, '');
           })
         ),
-    [conditionIndex]
+    []
   );
   const removeSpaceId = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(spaceIdsState(conditionIndex), (current) =>
+        set(spaceIdsState, (current) =>
           produce(current, (draft) => {
             if (draft.length === 1) {
               draft[0] = '';
@@ -67,7 +64,7 @@ const Component: FC = () => {
             }
           })
         ),
-    [conditionIndex]
+    []
   );
 
   return (

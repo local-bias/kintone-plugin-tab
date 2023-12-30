@@ -1,11 +1,9 @@
-import styled from '@emotion/styled';
 import {
   Autocomplete,
   FormControlLabel,
   IconButton,
   Radio,
   RadioGroup,
-  Skeleton,
   TextField,
   Tooltip,
 } from '@mui/material';
@@ -15,57 +13,48 @@ import { useRecoilCallback, useRecoilValue } from 'recoil';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { appGroupsState } from '../../../../states/kintone';
-import { conditionState, groupDisplayModeState, groupsState } from '../../../../states/plugin';
-import { useConditionIndex } from '../../../condition-index-provider';
+import { groupDisplayModeState, groupsState } from '../../../../states/plugin';
 import { FormPlaceholder } from './form-placeholder';
 
 const Component: FC = () => {
-  const conditionIndex = useConditionIndex();
   const appGroups = useRecoilValue(appGroupsState);
-  const groupDisplayMode = useRecoilValue(groupDisplayModeState(conditionIndex));
-  const groups = useRecoilValue(groupsState(conditionIndex));
+  const groupDisplayMode = useRecoilValue(groupDisplayModeState);
+  const groups = useRecoilValue(groupsState);
 
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(groupDisplayModeState(conditionIndex), value as Plugin.DisplayMode);
+        set(groupDisplayModeState, value as Plugin.DisplayMode);
       },
-    [conditionIndex]
+    []
   );
 
   const onGroupChange = useRecoilCallback(
     ({ set }) =>
       (i: number, value: string) => {
-        set(groupsState(conditionIndex), (current) =>
+        set(groupsState, (current) =>
           produce(current, (draft) => {
             draft[i] = value;
           })
         );
       },
-    [conditionIndex]
+    []
   );
 
   const addGroup = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(conditionState(conditionIndex), (current) =>
+        set(groupsState, (current) =>
           produce(current, (draft) => {
-            if (!draft) {
-              return;
-            }
-            if (!draft.groups) {
-              draft.groups = [''];
-            } else {
-              draft.groups.splice(i + 1, 0, '');
-            }
+            draft.splice(i + 1, 0, '');
           })
         ),
-    [conditionIndex]
+    []
   );
   const removeGroup = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(groupsState(conditionIndex), (current) =>
+        set(groupsState, (current) =>
           produce(current, (draft) => {
             if (draft.length === 1) {
               draft[0] = '';
@@ -74,7 +63,7 @@ const Component: FC = () => {
             }
           })
         ),
-    [conditionIndex]
+    []
   );
 
   return (

@@ -6,49 +6,48 @@ import { fieldDisplayModeState, fieldsState } from '../../../../states/plugin';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import FieldPropertiesSelect from './field-properties-select';
-import { useConditionIndex } from '../../../condition-index-provider';
 import { FormPlaceholder } from './form-placeholder';
+import { RecoilFieldSelect } from '@konomi-app/kintone-utilities-react';
+import { appFieldsState } from '@/config/states/kintone';
 
 const Component: FC = () => {
-  const conditionIndex = useConditionIndex();
-  const fields = useRecoilValue(fieldsState(conditionIndex));
-  const displayMode = useRecoilValue(fieldDisplayModeState(conditionIndex));
+  const fields = useRecoilValue(fieldsState);
+  const displayMode = useRecoilValue(fieldDisplayModeState);
 
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(fieldDisplayModeState(conditionIndex), value as Plugin.DisplayMode);
+        set(fieldDisplayModeState, value as Plugin.DisplayMode);
       },
-    [conditionIndex]
+    []
   );
 
   const onFieldsChange = useRecoilCallback(
     ({ set }) =>
       (i: number, value: string) => {
-        set(fieldsState(conditionIndex), (current) =>
+        set(fieldsState, (current) =>
           produce(current, (draft) => {
             draft[i] = value;
           })
         );
       },
-    [conditionIndex]
+    []
   );
 
   const addLabel = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(fieldsState(conditionIndex), (current) =>
+        set(fieldsState, (current) =>
           produce(current, (draft) => {
             draft.splice(i + 1, 0, '');
           })
         ),
-    [conditionIndex]
+    []
   );
   const removeLabel = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(fieldsState(conditionIndex), (current) =>
+        set(fieldsState, (current) =>
           produce(current, (draft) => {
             if (draft.length === 1) {
               draft[0] = '';
@@ -57,7 +56,7 @@ const Component: FC = () => {
             }
           })
         ),
-    [conditionIndex]
+    []
   );
 
   return (
@@ -73,7 +72,11 @@ const Component: FC = () => {
         <div className='grid gap-4'>
           {fields.map((field, i) => (
             <div key={i} className='flex gap-2 items-center'>
-              <FieldPropertiesSelect fieldCode={field} onChange={(e) => onFieldsChange(i, e)} />
+              <RecoilFieldSelect
+                state={appFieldsState}
+                fieldCode={field}
+                onChange={(e) => onFieldsChange(i, e)}
+              />
               <Tooltip title='フィールドを追加する'>
                 <IconButton size='small' onClick={() => addLabel(i)}>
                   <AddIcon fontSize='small' />

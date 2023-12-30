@@ -13,50 +13,48 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { appLabelsState } from '../../../../states/kintone';
-import { useConditionIndex } from '../../../condition-index-provider';
 import { labelDisplayModeState, labelsState } from '../../../../states/plugin';
 import { FormPlaceholder } from './form-placeholder';
 
 const Component: FC = () => {
-  const conditionIndex = useConditionIndex();
   const allLabels = useRecoilValue(appLabelsState);
-  const labels = useRecoilValue(labelsState(conditionIndex));
-  const labelDisplayMode = useRecoilValue(labelDisplayModeState(conditionIndex));
+  const labels = useRecoilValue(labelsState);
+  const labelDisplayMode = useRecoilValue(labelDisplayModeState);
 
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(labelDisplayModeState(conditionIndex), value as Plugin.DisplayMode);
+        set(labelDisplayModeState, value as Plugin.DisplayMode);
       },
-    [conditionIndex]
+    []
   );
 
   const onLabelsChange = useRecoilCallback(
     ({ set }) =>
       (i: number, value: string) => {
-        set(labelsState(conditionIndex), (current) =>
+        set(labelsState, (current) =>
           produce(current, (draft) => {
             draft[i] = value;
           })
         );
       },
-    [conditionIndex]
+    []
   );
 
   const addLabel = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(labelsState(conditionIndex), (current) =>
+        set(labelsState, (current) =>
           produce(current, (draft) => {
             draft.splice(i + 1, 0, '');
           })
         ),
-    [conditionIndex]
+    []
   );
   const removeLabel = useRecoilCallback(
     ({ set }) =>
       (i: number) =>
-        set(labelsState(conditionIndex), (current) =>
+        set(labelsState, (current) =>
           produce(current, (draft) => {
             if (draft.length === 1) {
               draft[0] = '';
@@ -65,7 +63,7 @@ const Component: FC = () => {
             }
           })
         ),
-    [conditionIndex]
+    []
   );
 
   return (

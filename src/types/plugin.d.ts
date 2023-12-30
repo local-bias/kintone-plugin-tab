@@ -18,12 +18,12 @@ declare namespace Plugin {
       displayMode: DisplayMode;
       fields: string[];
       labelDisplayMode?: DisplayMode;
-      labels?: string[];
+      labels: string[];
       groupDisplayMode?: DisplayMode;
-      groups?: string[];
+      groups: string[];
       spaceDisplayMode?: DisplayMode;
-      spaceIds?: string[];
-      hidesHR?: boolean;
+      spaceIds: string[];
+      hidesHR: boolean;
     }[];
   };
 }
