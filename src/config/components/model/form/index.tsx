@@ -5,7 +5,7 @@ import FieldForm from './condition/form-fields';
 import GroupForm from './condition/form-groups';
 import SpaceForm from './condition/form-spaces';
 import LabelForm from './condition/form-labels';
-import ConditionDeletionButton from './condition/condition-deletion-button';
+import ConditionDeletionButton from './condition-deletion-button';
 import {
   PluginFormDescription,
   PluginFormSection,
