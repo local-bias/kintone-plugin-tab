@@ -1,30 +1,40 @@
 import React, { Suspense, FC } from 'react';
 import { RecoilRoot } from 'recoil';
 import { SnackbarProvider } from 'notistack';
-
+import {
+  PluginBanner,
+  PluginContent,
+  PluginLayout,
+  PluginConfigProvider,
+  Notification,
+} from '@konomi-app/kintone-utilities-react';
 import { PluginErrorBoundary } from '@/lib/components/error-boundary';
-
-import Layout from './components/model/layout';
 import Sidebar from './components/model/sidebar';
 import Form from './components/model/form';
 import Footer from './components/model/footer';
-
-import { URL_PROMOTION } from '@/lib/static';
+import config from '../../plugin.config.mjs';
+import { URL_BANNER, URL_PROMOTION } from '@/lib/static';
 import { LoaderWithLabel } from '@konomi-app/ui-react';
 
 const Component: FC = () => (
   <>
     <RecoilRoot>
       <PluginErrorBoundary>
-        <SnackbarProvider maxSnack={1}>
-          <Layout>
-            <Suspense fallback={<LoaderWithLabel label='設定情報を取得しています...' />}>
-              <Sidebar />
-              <Form />
-              <Footer />
+        <PluginConfigProvider config={config}>
+          <Notification />
+          <SnackbarProvider maxSnack={1}>
+            <Suspense fallback={<LoaderWithLabel label='設定情報を取得しています' />}>
+              <PluginLayout>
+                <Sidebar />
+                <PluginContent>
+                  <Form />
+                </PluginContent>
+                <PluginBanner url={URL_BANNER} />
+                <Footer />
+              </PluginLayout>
             </Suspense>
-          </Layout>
-        </SnackbarProvider>
+          </SnackbarProvider>
+        </PluginConfigProvider>
       </PluginErrorBoundary>
     </RecoilRoot>
     <iframe
