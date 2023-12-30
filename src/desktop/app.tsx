@@ -5,13 +5,18 @@ import { PluginErrorBoundary } from '@/lib/components/error-boundary';
 
 import Tab from './tab';
 import { kintoneAPI } from '@konomi-app/kintone-utilities';
-import { appFieldsState, appLayoutState } from './states';
+import { appFieldsState, appLayoutState, tabIndexState } from './states';
 
-type Props = Readonly<{ properties: kintoneAPI.FieldProperties; layout: kintoneAPI.Layout }>;
+type Props = Readonly<{
+  initTabIndex: number;
+  properties: kintoneAPI.FieldProperties;
+  layout: kintoneAPI.Layout;
+}>;
 
-const Component: FC<Props> = ({ properties, layout }) => (
+const Component: FC<Props> = ({ initTabIndex, properties, layout }) => (
   <RecoilRoot
     initializeState={({ set }) => {
+      set(tabIndexState, initTabIndex);
       set(appFieldsState, properties);
       set(appLayoutState, layout);
     }}

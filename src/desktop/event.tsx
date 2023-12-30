@@ -31,29 +31,31 @@ manager.add(
       debug: process.env.NODE_ENV === 'development',
     });
     refresh({ condition: config.conditions[0], fieldProperties: properties, layout });
-    if (document.getElementById(ROOT_ID)) {
-      return event;
+    let rootElement: HTMLElement | null = null;
+    if (!document.getElementById(ROOT_ID)) {
+      const target = document.querySelector('#record-gaia');
+
+      if (!target) {
+        console.log('タブをレンダリングする対象エレメントが取得できませんでした');
+        return event;
+      }
+
+      target.classList.add(css`
+        padding: 0 !important;
+        display: flex;
+        gap: 8px;
+      `);
+
+      rootElement = document.createElement('div');
+      rootElement.id = ROOT_ID;
+
+      target.prepend(rootElement);
+    } else {
+      rootElement = document.getElementById(ROOT_ID);
     }
 
-    const target = document.querySelector('#record-gaia');
-
-    if (!target) {
-      console.log('タブをレンダリングする対象エレメントが取得できませんでした');
-      return event;
-    }
-
-    target.classList.add(css`
-      padding: 0 !important;
-      display: flex;
-      gap: 8px;
-    `);
-
-    const div = document.createElement('div');
-    div.id = ROOT_ID;
-
-    target.prepend(div);
-
-    createRoot(div).render(<App properties={properties} layout={layout} />);
+    const root = createRoot(rootElement!);
+    root.render(<App initTabIndex={0} properties={properties} layout={layout} />);
 
     return event;
   }
