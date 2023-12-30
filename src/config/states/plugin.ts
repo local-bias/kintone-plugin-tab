@@ -1,5 +1,4 @@
-import { PLUGIN_ID } from '@/lib/global';
-import { restoreStorage } from '@/lib/plugin';
+import { restorePluginConfig } from '@/lib/plugin';
 import { produce } from 'immer';
 import { atom, selector, selectorFamily } from 'recoil';
 
@@ -10,12 +9,12 @@ export const loadingState = atom<boolean>({
   default: false,
 });
 
-const updated = <T extends keyof kintone.plugin.Condition>(
-  storage: kintone.plugin.Storage,
+const updated = <T extends keyof Plugin.Condition>(
+  storage: Plugin.Config,
   props: {
     conditionIndex: number;
     key: T;
-    value: kintone.plugin.Condition[T];
+    value: Plugin.Condition[T];
   }
 ) => {
   const { conditionIndex, key, value } = props;
@@ -24,14 +23,14 @@ const updated = <T extends keyof kintone.plugin.Condition>(
   });
 };
 
-const getConditionField = <T extends keyof kintone.plugin.Condition>(
-  storage: kintone.plugin.Storage,
+const getConditionField = <T extends keyof Plugin.Condition>(
+  storage: Plugin.Config,
   props: {
     conditionIndex: number;
     key: T;
-    defaultValue: NonNullable<kintone.plugin.Condition[T]>;
+    defaultValue: NonNullable<Plugin.Condition[T]>;
   }
-): NonNullable<kintone.plugin.Condition[T]> => {
+): NonNullable<Plugin.Condition[T]> => {
   const { conditionIndex, key, defaultValue } = props;
   if (!storage.conditions[conditionIndex]) {
     return defaultValue;
@@ -39,9 +38,9 @@ const getConditionField = <T extends keyof kintone.plugin.Condition>(
   return storage.conditions[conditionIndex][key] ?? defaultValue;
 };
 
-export const storageState = atom<kintone.plugin.Storage>({
+export const storageState = atom<Plugin.Config>({
   key: `${PREFIX}storageState`,
-  default: restoreStorage(PLUGIN_ID),
+  default: restorePluginConfig(),
 });
 
 export const tabIndexState = atom<number>({
@@ -49,7 +48,7 @@ export const tabIndexState = atom<number>({
   default: 0,
 });
 
-export const conditionsState = selector<kintone.plugin.Condition[]>({
+export const conditionsState = selector<Plugin.Condition[]>({
   key: `${PREFIX}conditionsState`,
   get: ({ get }) => {
     const storage = get(storageState);
@@ -57,7 +56,7 @@ export const conditionsState = selector<kintone.plugin.Condition[]>({
   },
 });
 
-export const conditionState = selectorFamily<kintone.plugin.Condition | null, number>({
+export const conditionState = selectorFamily<Plugin.Condition | null, number>({
   key: `${PREFIX}conditionState`,
   get:
     (index) =>
@@ -80,7 +79,7 @@ export const conditionState = selectorFamily<kintone.plugin.Condition | null, nu
           if (!draft) {
             return;
           }
-          draft.conditions[index] = newValue as kintone.plugin.Condition;
+          draft.conditions[index] = newValue as Plugin.Condition;
         })
       );
     },
@@ -110,7 +109,7 @@ export const tabNameState = selectorFamily<string, number>({
     },
 });
 
-export const fieldDisplayModeState = selectorFamily<kintone.plugin.DisplayMode, number>({
+export const fieldDisplayModeState = selectorFamily<Plugin.DisplayMode, number>({
   key: `${PREFIX}fieldDisplayModeState`,
   get:
     (conditionIndex) =>
@@ -128,7 +127,7 @@ export const fieldDisplayModeState = selectorFamily<kintone.plugin.DisplayMode, 
         updated(current, {
           conditionIndex,
           key: 'displayMode',
-          value: newValue as kintone.plugin.DisplayMode,
+          value: newValue as Plugin.DisplayMode,
         })
       );
     },
@@ -154,7 +153,7 @@ export const fieldsState = selectorFamily<string[], number>({
     },
 });
 
-export const groupDisplayModeState = selectorFamily<kintone.plugin.DisplayMode, number>({
+export const groupDisplayModeState = selectorFamily<Plugin.DisplayMode, number>({
   key: `${PREFIX}groupDisplayModeState`,
   get:
     (conditionIndex) =>
@@ -172,7 +171,7 @@ export const groupDisplayModeState = selectorFamily<kintone.plugin.DisplayMode, 
         updated(current, {
           conditionIndex,
           key: 'groupDisplayMode',
-          value: newValue as kintone.plugin.DisplayMode,
+          value: newValue as Plugin.DisplayMode,
         })
       );
     },
@@ -198,7 +197,7 @@ export const groupsState = selectorFamily<string[], number>({
     },
 });
 
-export const labelDisplayModeState = selectorFamily<kintone.plugin.DisplayMode, number>({
+export const labelDisplayModeState = selectorFamily<Plugin.DisplayMode, number>({
   key: `${PREFIX}labelDisplayModeState`,
   get:
     (conditionIndex) =>
@@ -216,7 +215,7 @@ export const labelDisplayModeState = selectorFamily<kintone.plugin.DisplayMode, 
         updated(current, {
           conditionIndex,
           key: 'labelDisplayMode',
-          value: newValue as kintone.plugin.DisplayMode,
+          value: newValue as Plugin.DisplayMode,
         })
       );
     },
@@ -246,7 +245,7 @@ export const labelsState = selectorFamily<string[], number>({
     },
 });
 
-export const spaceDisplayModeState = selectorFamily<kintone.plugin.DisplayMode, number>({
+export const spaceDisplayModeState = selectorFamily<Plugin.DisplayMode, number>({
   key: `${PREFIX}spaceDisplayModeState`,
   get:
     (conditionIndex) =>
@@ -264,7 +263,7 @@ export const spaceDisplayModeState = selectorFamily<kintone.plugin.DisplayMode, 
         updated(current, {
           conditionIndex,
           key: 'spaceDisplayMode',
-          value: newValue as kintone.plugin.DisplayMode,
+          value: newValue as Plugin.DisplayMode,
         })
       );
     },

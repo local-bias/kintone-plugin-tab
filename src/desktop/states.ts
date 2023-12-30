@@ -1,13 +1,12 @@
-import { PLUGIN_ID } from '@/lib/global';
-import { restoreStorage } from '@/lib/plugin';
+import { restorePluginConfig } from '@/lib/plugin';
 import { kintoneAPI } from '@konomi-app/kintone-utilities';
 import { atom } from 'recoil';
 
 const PREFIX = `DesktopState`;
 
-export const pluginConfigState = atom<kintone.plugin.Storage>({
+export const pluginConfigState = atom<Plugin.Config>({
   key: 'pluginConfigState',
-  default: restoreStorage(PLUGIN_ID),
+  default: restorePluginConfig(),
 });
 
 export const tabIndexState = atom<number>({

@@ -3,7 +3,7 @@ import { kintoneAPI } from '@konomi-app/kintone-utilities';
 import { getSpaceElement, setFieldShown } from '@lb-ribbit/kintone-xapp';
 
 export const refresh = (params: {
-  condition: kintone.plugin.Condition;
+  condition: Plugin.Condition;
   fieldProperties: kintoneAPI.FieldProperties;
   layout: kintoneAPI.Layout;
 }) => {

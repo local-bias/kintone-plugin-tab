@@ -28,7 +28,7 @@ const Component: FC = () => {
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(spaceDisplayModeState(conditionIndex), value as kintone.plugin.DisplayMode);
+        set(spaceDisplayModeState(conditionIndex), value as Plugin.DisplayMode);
       },
     [conditionIndex]
   );

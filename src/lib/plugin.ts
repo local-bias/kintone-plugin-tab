@@ -1,43 +1,8 @@
-/**
- * プラグインがアプリ単位で保存している設定情報を返却します
- */
-export const restoreStorage = (id: string): kintone.plugin.Storage => {
-  /** 復元した設定情報 */
-  const config: Record<string, string> = kintone.plugin.app.getConfig(id);
+import { restoreStorage } from '@konomi-app/kintone-utilities';
+import { produce } from 'immer';
+import { PLUGIN_ID } from './global';
 
-  // 空の場合は雛形を返却します
-  if (!Object.keys(config).length) {
-    return createConfig();
-  }
-
-  return Object.entries(config).reduce<any>(
-    (acc, [key, value]) => ({ ...acc, [key]: JSON.parse(value) }),
-    {}
-  );
-};
-
-/**
- * アプリにプラグインの設定情報を保存します
- * @param target 保存する設定情報
- * @param callback 実行完了後イベント
- */
-export const storeStorage = (target: Record<string, any>, callback?: () => void): void => {
-  const converted = Object.entries(target).reduce(
-    (acc, [key, value]) => ({ ...acc, [key]: JSON.stringify(value) }),
-    {}
-  );
-
-  kintone.plugin.app.setConfig(converted, callback);
-};
-
-/**
- * プラグインの設定情報のひな形を返却します
- */
-export const createConfig = (): kintone.plugin.Storage => ({
-  conditions: [getNewCondition()],
-});
-
-export const getNewCondition = (): kintone.plugin.Condition => ({
+export const getNewCondition = (): Plugin.Condition => ({
   tabName: 'すべて',
   tabIcon: '',
   displayMode: 'sub',
@@ -50,3 +15,64 @@ export const getNewCondition = (): kintone.plugin.Condition => ({
   spaceIds: [''],
   hidesHR: false,
 });
+
+/**
+ * プラグインの設定情報のひな形を返却します
+ */
+export const createConfig = (): Plugin.Config => ({
+  version: 1,
+  conditions: [getNewCondition()],
+});
+
+/**
+ * 古いバージョンの設定情報を新しいバージョンに変換します
+ * @param anyConfig 保存されている設定情報
+ * @returns 新しいバージョンの設定情報
+ */
+export const migrateConfig = (anyConfig: Plugin.AnyConfig): Plugin.Config => {
+  const { version } = anyConfig;
+  switch (version) {
+    case undefined:
+    case 1:
+      return anyConfig;
+    default:
+      return anyConfig;
+  }
+};
+
+/**
+ * プラグインの設定情報を復元します
+ */
+export const restorePluginConfig = (): Plugin.Config => {
+  const config = restoreStorage<Plugin.AnyConfig>(PLUGIN_ID) ?? createConfig();
+  return migrateConfig(config);
+};
+
+export const getUpdatedStorage = <T extends keyof Plugin.Condition>(
+  storage: Plugin.Config,
+  props: {
+    conditionIndex: number;
+    key: T;
+    value: Plugin.Condition[T];
+  }
+) => {
+  const { conditionIndex, key, value } = props;
+  return produce(storage, (draft) => {
+    draft.conditions[conditionIndex][key] = value;
+  });
+};
+
+export const getConditionField = <T extends keyof Plugin.Condition>(
+  storage: Plugin.Config,
+  props: {
+    conditionIndex: number;
+    key: T;
+    defaultValue: NonNullable<Plugin.Condition[T]>;
+  }
+): NonNullable<Plugin.Condition[T]> => {
+  const { conditionIndex, key, defaultValue } = props;
+  if (!storage.conditions[conditionIndex]) {
+    return defaultValue;
+  }
+  return storage.conditions[conditionIndex][key] ?? defaultValue;
+};

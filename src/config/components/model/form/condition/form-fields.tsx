@@ -1,6 +1,6 @@
 import { FormControlLabel, IconButton, Radio, RadioGroup, Skeleton, Tooltip } from '@mui/material';
 import { produce } from 'immer';
-import React, { FC, FCX, memo, Suspense } from 'react';
+import React, { FC, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { fieldDisplayModeState, fieldsState } from '../../../../states/plugin';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,7 +10,7 @@ import FieldPropertiesSelect from './field-properties-select';
 import { useConditionIndex } from '../../../condition-index-provider';
 import { FormPlaceholder } from './form-placeholder';
 
-const Component: FCX = ({ className }) => {
+const Component: FC = () => {
   const conditionIndex = useConditionIndex();
   const fields = useRecoilValue(fieldsState(conditionIndex));
   const displayMode = useRecoilValue(fieldDisplayModeState(conditionIndex));
@@ -18,7 +18,7 @@ const Component: FCX = ({ className }) => {
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(fieldDisplayModeState(conditionIndex), value as kintone.plugin.DisplayMode);
+        set(fieldDisplayModeState(conditionIndex), value as Plugin.DisplayMode);
       },
     [conditionIndex]
   );
