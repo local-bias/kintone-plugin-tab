@@ -30,6 +30,14 @@ const Component: FC = () => {
       </PluginFormSection>
       <PluginFormSection>
         <PluginFormTitle>グループフィールドの設定</PluginFormTitle>
+        <PluginFormDescription>
+          タブを選択した際に表示・非表示にするグループを設定します。
+        </PluginFormDescription>
+        <PluginFormDescription last>
+          <span className='text-red-500'>
+            表示に設定しても、グループに所属するフィールドは影響を受けません。グループ内のフィールドを表示したい場合は、「フィールドの設定」からフィールドを指定する必要があります。
+          </span>
+        </PluginFormDescription>
         <GroupForm />
       </PluginFormSection>
       <PluginFormSection>

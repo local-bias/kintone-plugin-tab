@@ -16,11 +16,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { appSpacesState } from '../../../../states/kintone';
 import { spaceDisplayModeState, spaceIdsState } from '../../../../states/plugin';
 import { FormPlaceholder } from './form-placeholder';
+import { useRecoilRow } from '@konomi-app/kintone-utilities-react';
 
 const Component: FC = () => {
   const appSpaces = useRecoilValue(appSpacesState);
   const spaceDisplayMode = useRecoilValue(spaceDisplayModeState);
   const spaceIds = useRecoilValue(spaceIdsState);
+  const { addRow, deleteRow } = useRecoilRow({ state: spaceIdsState, getNewRow: () => '' });
 
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
@@ -42,40 +44,13 @@ const Component: FC = () => {
     []
   );
 
-  const addSpaceId = useRecoilCallback(
-    ({ set }) =>
-      (i: number) =>
-        set(spaceIdsState, (current) =>
-          produce(current, (draft) => {
-            draft.splice(i + 1, 0, '');
-          })
-        ),
-    []
-  );
-  const removeSpaceId = useRecoilCallback(
-    ({ set }) =>
-      (i: number) =>
-        set(spaceIdsState, (current) =>
-          produce(current, (draft) => {
-            if (draft.length === 1) {
-              draft[0] = '';
-            } else {
-              draft.splice(i, 1);
-            }
-          })
-        ),
-    []
-  );
-
   return (
-    <div className='grid grid-cols-[300px_1fr]'>
-      <div className='left'>
-        <RadioGroup defaultValue='sub' value={spaceDisplayMode} onChange={onDisplayModeChange}>
-          <FormControlLabel value='add' control={<Radio />} label='指定したスペースだけ表示' />
-          <FormControlLabel value='sub' control={<Radio />} label='指定したスペースを非表示' />
-        </RadioGroup>
-      </div>
-      <div className='right'>
+    <div className='grid gap-2'>
+      <RadioGroup defaultValue='sub' row value={spaceDisplayMode} onChange={onDisplayModeChange}>
+        <FormControlLabel value='add' control={<Radio />} label='指定したスペースだけ表示' />
+        <FormControlLabel value='sub' control={<Radio />} label='指定したスペースを非表示' />
+      </RadioGroup>
+      <div>
         <h3>{spaceDisplayMode === 'add' ? '表示する' : '表示しない'}スペース</h3>
         <div className='grid gap-4'>
           {spaceIds.map((spaceId, i) => (
@@ -97,12 +72,12 @@ const Component: FC = () => {
                 )}
               />
               <Tooltip title='フィールドを追加する'>
-                <IconButton size='small' onClick={() => addSpaceId(i)}>
+                <IconButton size='small' onClick={() => addRow(i)}>
                   <AddIcon fontSize='small' />
                 </IconButton>
               </Tooltip>
               <Tooltip title='このフィールドを削除する'>
-                <IconButton size='small' onClick={() => removeSpaceId(i)}>
+                <IconButton size='small' onClick={() => deleteRow(i)}>
                   <DeleteIcon fontSize='small' />
                 </IconButton>
               </Tooltip>

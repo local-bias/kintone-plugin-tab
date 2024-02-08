@@ -6,6 +6,7 @@ import {
   RadioGroup,
   TextField,
   Tooltip,
+  InputLabel,
 } from '@mui/material';
 import { produce } from 'immer';
 import React, { FC, memo, Suspense } from 'react';
@@ -15,11 +16,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { appGroupsState } from '../../../../states/kintone';
 import { groupDisplayModeState, groupsState } from '../../../../states/plugin';
 import { FormPlaceholder } from './form-placeholder';
+import { useRecoilRow } from '@konomi-app/kintone-utilities-react';
 
 const Component: FC = () => {
   const appGroups = useRecoilValue(appGroupsState);
   const groupDisplayMode = useRecoilValue(groupDisplayModeState);
   const groups = useRecoilValue(groupsState);
+  const { addRow, deleteRow } = useRecoilRow({ state: groupsState, getNewRow: () => '' });
 
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
@@ -41,41 +44,16 @@ const Component: FC = () => {
     []
   );
 
-  const addGroup = useRecoilCallback(
-    ({ set }) =>
-      (i: number) =>
-        set(groupsState, (current) =>
-          produce(current, (draft) => {
-            draft.splice(i + 1, 0, '');
-          })
-        ),
-    []
-  );
-  const removeGroup = useRecoilCallback(
-    ({ set }) =>
-      (i: number) =>
-        set(groupsState, (current) =>
-          produce(current, (draft) => {
-            if (draft.length === 1) {
-              draft[0] = '';
-            } else {
-              draft.splice(i, 1);
-            }
-          })
-        ),
-    []
-  );
-
   return (
-    <div className='grid grid-cols-[300px_1fr]'>
-      <div className='left'>
-        <RadioGroup defaultValue='sub' value={groupDisplayMode} onChange={onDisplayModeChange}>
-          <FormControlLabel value='add' control={<Radio />} label='指定したグループだけ表示' />
-          <FormControlLabel value='sub' control={<Radio />} label='指定したグループを非表示' />
-        </RadioGroup>
-      </div>
-      <div className='right'>
-        <h3>{groupDisplayMode === 'add' ? '表示する' : '表示しない'}グループ</h3>
+    <div className='grid gap-2'>
+      <RadioGroup defaultValue='sub' row value={groupDisplayMode} onChange={onDisplayModeChange}>
+        <FormControlLabel value='add' control={<Radio />} label='指定したグループだけ表示' />
+        <FormControlLabel value='sub' control={<Radio />} label='指定したグループを非表示' />
+      </RadioGroup>
+      <div>
+        <InputLabel className='mb-2'>
+          {groupDisplayMode === 'add' ? '表示する' : '表示しない'}グループ
+        </InputLabel>
         <div className='grid gap-4'>
           {groups.map((field, i) => (
             <div key={i} className='flex gap-2 items-center'>
@@ -91,12 +69,12 @@ const Component: FC = () => {
                 )}
               />
               <Tooltip title='フィールドを追加する'>
-                <IconButton size='small' onClick={() => addGroup(i)}>
+                <IconButton size='small' onClick={() => addRow(i)}>
                   <AddIcon fontSize='small' />
                 </IconButton>
               </Tooltip>
               <Tooltip title='このフィールドを削除する'>
-                <IconButton size='small' onClick={() => removeGroup(i)}>
+                <IconButton size='small' onClick={() => deleteRow(i)}>
                   <DeleteIcon fontSize='small' />
                 </IconButton>
               </Tooltip>

@@ -2,8 +2,8 @@ import { Skeleton } from '@mui/material';
 import React, { FC } from 'react';
 
 const Component: FC = () => (
-  <div className='grid grid-cols-[300px_1fr]'>
-    <div>
+  <div className='grid gap-2'>
+    <div className='flex gap-2'>
       {new Array(2).fill('').map((_, i) => (
         <div key={i} className='flex gap-2 items-center'>
           <Skeleton variant='circular' width={20} />

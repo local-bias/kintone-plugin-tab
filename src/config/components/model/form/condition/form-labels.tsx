@@ -15,11 +15,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { appLabelsState } from '../../../../states/kintone';
 import { labelDisplayModeState, labelsState } from '../../../../states/plugin';
 import { FormPlaceholder } from './form-placeholder';
+import { useRecoilRow } from '@konomi-app/kintone-utilities-react';
 
 const Component: FC = () => {
   const allLabels = useRecoilValue(appLabelsState);
   const labels = useRecoilValue(labelsState);
   const labelDisplayMode = useRecoilValue(labelDisplayModeState);
+  const { addRow, deleteRow } = useRecoilRow({ state: labelsState, getNewRow: () => '' });
 
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
@@ -41,34 +43,9 @@ const Component: FC = () => {
     []
   );
 
-  const addLabel = useRecoilCallback(
-    ({ set }) =>
-      (i: number) =>
-        set(labelsState, (current) =>
-          produce(current, (draft) => {
-            draft.splice(i + 1, 0, '');
-          })
-        ),
-    []
-  );
-  const removeLabel = useRecoilCallback(
-    ({ set }) =>
-      (i: number) =>
-        set(labelsState, (current) =>
-          produce(current, (draft) => {
-            if (draft.length === 1) {
-              draft[0] = '';
-            } else {
-              draft.splice(i, 1);
-            }
-          })
-        ),
-    []
-  );
-
   return (
-    <div className='grid grid-cols-[300px_1fr]'>
-      <RadioGroup defaultValue='sub' value={labelDisplayMode} onChange={onDisplayModeChange}>
+    <div className='grid gap-2'>
+      <RadioGroup defaultValue='sub' row value={labelDisplayMode} onChange={onDisplayModeChange}>
         <FormControlLabel value='add' control={<Radio />} label='指定したラベルだけ表示' />
         <FormControlLabel value='sub' control={<Radio />} label='指定したラベルを非表示' />
       </RadioGroup>
@@ -87,12 +64,12 @@ const Component: FC = () => {
                 )}
               />
               <Tooltip title='フィールドを追加する'>
-                <IconButton size='small' onClick={() => addLabel(i)}>
+                <IconButton size='small' onClick={() => addRow(i)}>
                   <AddIcon fontSize='small' />
                 </IconButton>
               </Tooltip>
               <Tooltip title='このフィールドを削除する'>
-                <IconButton size='small' onClick={() => removeLabel(i)}>
+                <IconButton size='small' onClick={() => deleteRow(i)}>
                   <DeleteIcon fontSize='small' />
                 </IconButton>
               </Tooltip>
