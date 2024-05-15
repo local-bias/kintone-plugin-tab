@@ -1,11 +1,13 @@
-//@ts-check
-const hp = 'https://konomi.app/';
-const commonCdn = 'https://kintone-plugin.konomi.app/common';
+// @ts-check
+const hp = 'https://konomi.app';
+const cdn = 'https://kintone-plugin.konomi.app';
+const key = 'tab';
 const localhost = 'https://127.0.0.1:6327';
 
-/** @type { import('@konomi-app/kintone-utilities').PluginConfig } */
-export default {
-  id: 'ribbit-kintone-plugin-tab',
+/** @satisfies { import('@konomi-app/kintone-utilities').PluginConfig } */
+export default /** @type { const } */ ({
+  id: `ribbit-kintone-plugin-${key}`,
+  pluginReleasePageUrl: `https://ribbit.konomi.app/kintone-plugin/`,
   manifest: {
     base: {
       manifest_version: 1,
@@ -13,7 +15,7 @@ export default {
       type: 'APP',
       name: {
         en: 'vertical tab plugin',
-        ja: 'タブ表示プラグイン',
+        ja: '垂直タブ表示プラグイン',
         zh: '垂直标签插件',
       },
       description: {
@@ -23,12 +25,12 @@ export default {
       },
       icon: 'icon.png',
       homepage_url: { ja: hp, en: hp },
-      desktop: { js: [`${commonCdn}/dist/desktop.js`], css: [] },
-      mobile: { js: [`${commonCdn}/dist/desktop.js`], css: [] },
+      desktop: { js: [`${cdn}/common/desktop.js`], css: [`${cdn}/common/desktop.css`] },
+      mobile: { js: [`${cdn}/common/desktop.js`], css: [`${cdn}/common/desktop.css`] },
       config: {
         html: 'config.html',
-        js: [`${commonCdn}/dist/config.js`],
-        css: [],
+        js: [`${cdn}/common/config.js`],
+        css: [`${cdn}/common/config.css`],
         required_params: [],
       },
     },
@@ -47,9 +49,14 @@ export default {
       },
     },
     prod: {
-      desktop: { js: [`desktop.js`], css: [`desktop.css`] },
-      mobile: { js: [`desktop.js`], css: [`desktop.css`] },
-      config: { js: [`config.js`], css: [`config.css`] },
+      desktop: { js: [`${cdn}/${key}/desktop.js`], css: [`${cdn}/${key}/desktop.css`] },
+      mobile: { js: [`${cdn}/${key}/desktop.js`], css: [`${cdn}/${key}/desktop.css`] },
+      config: { js: [`${cdn}/${key}/config.js`], css: [`${cdn}/${key}/config.css`] },
+    },
+    standalone: {
+      desktop: { js: ['desktop.js'], css: ['desktop.css'] },
+      mobile: { js: ['desktop.js'], css: ['desktop.css'] },
+      config: { js: ['config.js'], css: ['config.css'] },
     },
   },
-};
+});
