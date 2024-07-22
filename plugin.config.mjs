@@ -23,7 +23,7 @@ export default /** @type { const } */ ({
   manifest: {
     base: {
       manifest_version: 1,
-      version: '2.7.0',
+      version: '2.9.0',
       type: 'APP',
       name: {
         en: 'vertical tab plugin',
