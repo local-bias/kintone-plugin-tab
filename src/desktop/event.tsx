@@ -4,7 +4,7 @@ import { css } from '@emotion/css';
 import { restorePluginConfig } from '@/lib/plugin';
 
 import App from './app';
-import { getFormFields, getFormLayout } from '@konomi-app/kintone-utilities';
+import { getFormFields, getFormLayout, isMobile } from '@konomi-app/kintone-utilities';
 import { GUEST_SPACE_ID } from '@/lib/global';
 import { getAppId } from '@lb-ribbit/kintone-xapp';
 import { refresh } from './actions';
@@ -15,6 +15,9 @@ const ROOT_ID = 'ribbit-tab-plugin-root';
 manager.add(
   ['app.record.create.show', 'app.record.edit.show', 'app.record.detail.show'],
   async (event) => {
+    if (isMobile(event.type)) {
+      return event;
+    }
     const config = restorePluginConfig();
     if (!config?.conditions?.length) {
       return event;
