@@ -1,30 +1,15 @@
-import React, { FC } from 'react';
-import { RecoilRoot } from 'recoil';
-
 import { PluginErrorBoundary } from '@/lib/components/error-boundary';
-
+import { store } from '@/lib/store';
+import { Provider } from 'jotai';
+import React, { FC } from 'react';
 import Tab from './tab';
-import { kintoneAPI } from '@konomi-app/kintone-utilities';
-import { appFieldsState, appLayoutState, tabIndexState } from './states';
 
-type Props = Readonly<{
-  initTabIndex: number;
-  properties: kintoneAPI.FieldProperties;
-  layout: kintoneAPI.Layout;
-}>;
-
-const Component: FC<Props> = ({ initTabIndex, properties, layout }) => (
-  <RecoilRoot
-    initializeState={({ set }) => {
-      set(tabIndexState, initTabIndex);
-      set(appFieldsState, properties);
-      set(appLayoutState, layout);
-    }}
-  >
+const App: FC = () => (
+  <Provider store={store}>
     <PluginErrorBoundary>
       <Tab />
     </PluginErrorBoundary>
-  </RecoilRoot>
+  </Provider>
 );
 
-export default Component;
+export default App;

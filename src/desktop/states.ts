@@ -1,25 +1,46 @@
+import { GUEST_SPACE_ID } from '@/lib/global';
 import { restorePluginConfig } from '@/lib/plugin';
-import { kintoneAPI } from '@konomi-app/kintone-utilities';
-import { atom } from 'recoil';
+import { getAppId, getFormFields, getFormLayout, kintoneAPI } from '@konomi-app/kintone-utilities';
+import { atom } from 'jotai';
+import { focusAtom } from 'jotai-optics';
 
-const PREFIX = `DesktopState`;
+export const kintoneEventAtom = atom<kintoneAPI.js.EventType | null>(null);
 
-export const pluginConfigState = atom<Plugin.Config>({
-  key: 'pluginConfigState',
-  default: restorePluginConfig(),
+export const kintoneAppAtom = atom(getAppId());
+
+export const pluginConfigAtom = atom(restorePluginConfig());
+export const pluginConditionsAtom = focusAtom(pluginConfigAtom, (s) => s.prop('conditions'));
+
+export const tabIndexAtom = atom(0);
+
+export const selectedConditionAtom = atom((get) => {
+  const pluginConfig = get(pluginConfigAtom);
+  const tabIndex = get(tabIndexAtom);
+  return pluginConfig.conditions[tabIndex];
 });
 
-export const tabIndexState = atom<number>({
-  key: 'tabIndexState',
-  default: 0,
+export const appFieldsAtom = atom<Promise<kintoneAPI.FieldProperties | null>>(async (get) => {
+  const app = get(kintoneAppAtom);
+  if (!app) {
+    return null;
+  }
+  const { properties } = await getFormFields({
+    app,
+    guestSpaceId: GUEST_SPACE_ID,
+    debug: process.env.NODE_ENV === 'development',
+  });
+  return properties;
 });
 
-export const appLayoutState = atom<kintoneAPI.Layout | null>({
-  key: `${PREFIX}appLayoutState`,
-  default: null,
-});
-
-export const appFieldsState = atom<kintoneAPI.FieldProperties | null>({
-  key: `${PREFIX}appFieldsState`,
-  default: null,
+export const appLayoutAtom = atom<Promise<kintoneAPI.Layout | null>>(async (get) => {
+  const app = get(kintoneAppAtom);
+  if (!app) {
+    return null;
+  }
+  const { layout } = await getFormLayout({
+    app,
+    guestSpaceId: GUEST_SPACE_ID,
+    debug: process.env.NODE_ENV === 'development',
+  });
+  return layout;
 });

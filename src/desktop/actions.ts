@@ -1,13 +1,20 @@
 import { flatLayout } from '@/lib/kintone-api';
+import { store } from '@/lib/store';
 import { kintoneAPI } from '@konomi-app/kintone-utilities';
 import { getSpaceElement, setFieldShown } from '@lb-ribbit/kintone-xapp';
+import { appFieldsAtom, appLayoutAtom, selectedConditionAtom } from './states';
 
-export const refresh = (params: {
-  condition: Plugin.Condition;
-  fieldProperties: kintoneAPI.FieldProperties;
-  layout: kintoneAPI.Layout;
-}) => {
-  const { fieldProperties, layout, condition } = params;
+export const refresh = async () => {
+  const condition = store.get(selectedConditionAtom);
+  const fieldProperties = await store.get(appFieldsAtom);
+  const layout = await store.get(appLayoutAtom);
+
+  if (!fieldProperties || !layout) {
+    process.env.NODE_ENV === 'development' &&
+      console.error('fieldProperties or layout is not found');
+    return;
+  }
+
   Object.keys(fieldProperties).forEach((code) => {
     setFieldShown(code, true);
   });
@@ -62,6 +69,8 @@ export const refresh = (params: {
   const { hidesHR = false } = condition;
   const hrElements = document.querySelectorAll<HTMLHRElement>('.hr-cybozu');
   hrElements.forEach((el) => (el.style.display = hidesHR ? 'none' : 'block'));
+
+  process.env.NODE_ENV === 'development' && console.log('✨ refreshed');
 };
 
 const getGroupFields = (layout: kintoneAPI.Layout): kintoneAPI.layout.Group[] => {

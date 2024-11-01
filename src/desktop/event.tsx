@@ -1,16 +1,15 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { css } from '@emotion/css';
-import { restorePluginConfig } from '@/lib/plugin';
-
-import App from './app';
-import { getFormFields, getFormLayout, isMobile } from '@konomi-app/kintone-utilities';
-import { GUEST_SPACE_ID } from '@/lib/global';
-import { getAppId } from '@lb-ribbit/kintone-xapp';
-import { refresh } from './actions';
 import { manager } from '@/lib/listener';
+import { restorePluginConfig } from '@/lib/plugin';
+import { css } from '@emotion/css';
+import { isMobile } from '@konomi-app/kintone-utilities';
+import React from 'react';
+import { createRoot, Root } from 'react-dom/client';
+import { refresh } from './actions';
+import App from './app';
 
 const ROOT_ID = 'ribbit-tab-plugin-root';
+
+let cachedRoot: Root | null = null;
 
 manager.add(
   ['app.record.create.show', 'app.record.edit.show', 'app.record.detail.show'],
@@ -22,20 +21,9 @@ manager.add(
     if (!config?.conditions?.length) {
       return event;
     }
-    const app = getAppId()!;
-    const { properties } = await getFormFields({
-      app,
-      guestSpaceId: GUEST_SPACE_ID,
-      debug: process.env.NODE_ENV === 'development',
-    });
-    const { layout } = await getFormLayout({
-      app,
-      guestSpaceId: GUEST_SPACE_ID,
-      debug: process.env.NODE_ENV === 'development',
-    });
-    refresh({ condition: config.conditions[0], fieldProperties: properties, layout });
-    let rootElement: HTMLElement | null = null;
-    if (!document.getElementById(ROOT_ID)) {
+
+    refresh();
+    if (!cachedRoot) {
       const target = document.querySelector('#record-gaia');
 
       if (!target) {
@@ -49,16 +37,15 @@ manager.add(
         gap: 8px;
       `);
 
-      rootElement = document.createElement('div');
+      const rootElement = document.createElement('div');
       rootElement.id = ROOT_ID;
+      const root = createRoot(rootElement);
+      cachedRoot = root;
 
       target.prepend(rootElement);
-    } else {
-      rootElement = document.getElementById(ROOT_ID);
     }
 
-    const root = createRoot(rootElement!);
-    root.render(<App initTabIndex={0} properties={properties} layout={layout} />);
+    cachedRoot.render(<App />);
 
     return event;
   }

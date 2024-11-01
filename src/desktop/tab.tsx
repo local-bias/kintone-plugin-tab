@@ -1,42 +1,29 @@
-import React, { FC, FCX } from 'react';
 import styled from '@emotion/styled';
 import { Tab, Tabs } from '@mui/material';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { appFieldsState, appLayoutState, pluginConfigState, tabIndexState } from './states';
+import { useAtomValue } from 'jotai';
+import { useAtomCallback } from 'jotai/utils';
+import React, { FC, FCX, useCallback } from 'react';
 import { refresh } from './actions';
+import { pluginConditionsAtom, tabIndexAtom } from './states';
 
-const TabComponent: FC = () => {
-  const storage = useRecoilValue(pluginConfigState)!;
-  const tabIndex = useRecoilValue(tabIndexState);
+const TabContent: FC = () => {
+  const conditions = useAtomValue(pluginConditionsAtom);
+  return conditions.map((condition, i) => <Tab key={i} label={condition.tabName} />);
+};
 
-  const onTabChange = useRecoilCallback(
-    ({ set, snapshot }) =>
-      async (_: any, index: number) => {
-        set(tabIndexState, index);
-        const storage = await snapshot.getPromise(pluginConfigState);
+const TabContainer: FC = () => {
+  const tabIndex = useAtomValue(tabIndexAtom);
 
-        if (!storage || !storage.conditions[index]) {
-          return;
-        }
-
-        const condition = storage.conditions[index];
-        const fieldProperties = (await snapshot.getPromise(appFieldsState))!;
-        const layout = (await snapshot.getPromise(appLayoutState))!;
-
-        refresh({ condition, fieldProperties, layout });
-      },
-    []
+  const onTabChange = useAtomCallback(
+    useCallback(async (get, set, _: any, index: number) => {
+      set(tabIndexAtom, index);
+      refresh();
+    }, [])
   );
-
-  if (!storage) {
-    return <div></div>;
-  }
 
   return (
     <Tabs orientation='vertical' variant='scrollable' value={tabIndex} onChange={onTabChange}>
-      {storage.conditions.map((condition, i) => (
-        <Tab key={i} label={condition.tabName} />
-      ))}
+      <TabContent />
     </Tabs>
   );
 };
@@ -44,7 +31,7 @@ const TabComponent: FC = () => {
 const Container: FCX = ({ className }) => (
   <div {...{ className }}>
     <div>
-      <TabComponent />
+      <TabContainer />
     </div>
   </div>
 );
