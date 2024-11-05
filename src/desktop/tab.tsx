@@ -6,12 +6,8 @@ import { FC, FCX, useCallback } from 'react';
 import { refresh } from './actions';
 import { pluginConditionsAtom, tabIndexAtom } from './states';
 
-const TabContent: FC = () => {
-  const conditions = useAtomValue(pluginConditionsAtom);
-  return conditions.map((condition, i) => <Tab key={i} label={condition.tabName} />);
-};
-
 const TabContainer: FC = () => {
+  const conditions = useAtomValue(pluginConditionsAtom);
   const tabIndex = useAtomValue(tabIndexAtom);
 
   const onTabChange = useAtomCallback(
@@ -23,7 +19,9 @@ const TabContainer: FC = () => {
 
   return (
     <Tabs orientation='vertical' variant='scrollable' value={tabIndex} onChange={onTabChange}>
-      <TabContent />
+      {conditions.map((condition, i) => (
+        <Tab key={i} label={condition.tabName} />
+      ))}
     </Tabs>
   );
 };
