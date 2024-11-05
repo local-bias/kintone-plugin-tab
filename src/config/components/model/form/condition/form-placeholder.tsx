@@ -1,5 +1,5 @@
 import { Skeleton } from '@mui/material';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 const Component: FC = () => (
   <div className='grid gap-2'>

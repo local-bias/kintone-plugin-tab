@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import {
   Autocomplete,
   FormControlLabel,
@@ -9,7 +8,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { produce } from 'immer';
-import React, { FC, memo, Suspense } from 'react';
+import { FC, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';

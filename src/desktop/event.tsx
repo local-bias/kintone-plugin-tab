@@ -2,7 +2,6 @@ import { manager } from '@/lib/listener';
 import { restorePluginConfig } from '@/lib/plugin';
 import { css } from '@emotion/css';
 import { isMobile } from '@konomi-app/kintone-utilities';
-import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { refresh } from './actions';
 import App from './app';

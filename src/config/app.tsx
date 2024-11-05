@@ -1,4 +1,4 @@
-import React, { Suspense, FC } from 'react';
+import { Suspense, FC } from 'react';
 import { RecoilRoot } from 'recoil';
 import { SnackbarProvider } from 'notistack';
 import {

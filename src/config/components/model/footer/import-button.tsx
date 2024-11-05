@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FC, memo } from 'react';
+import { ChangeEventHandler, FC, memo } from 'react';
 import { useRecoilCallback } from 'recoil';
 import { useSnackbar } from 'notistack';
 import { storageState } from '../../../states/plugin';

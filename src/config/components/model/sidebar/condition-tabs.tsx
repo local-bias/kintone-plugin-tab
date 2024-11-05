@@ -1,5 +1,5 @@
 import { Tabs } from '@mui/material';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { conditionsState, tabIndexState } from '../../../states/plugin';
 import ConditionTab from './condition-tab';
@@ -18,7 +18,7 @@ const Component: FC = () => {
 
   return (
     <Tabs value={tabIndex} onChange={onTabChange} orientation='vertical' variant='standard'>
-      {conditions.map((condition, i) => (
+      {conditions.map((_, i) => (
         <ConditionTab key={i} index={i} />
       ))}
     </Tabs>

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { hidesHRState, tabNameState } from '../../../states/plugin';
 
 import FieldForm from './condition/form-fields';

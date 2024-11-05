@@ -3,7 +3,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, CircularProgress } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import React, { FC, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 
 import { loadingState, storageState } from '../../../states/plugin';

@@ -1,6 +1,6 @@
-import { FormControlLabel, IconButton, Radio, RadioGroup, Skeleton, Tooltip } from '@mui/material';
+import { FormControlLabel, IconButton, Radio, RadioGroup, Tooltip } from '@mui/material';
 import { produce } from 'immer';
-import React, { FC, memo, Suspense } from 'react';
+import { FC, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { fieldDisplayModeState, fieldsState } from '../../../../states/plugin';
 import AddIcon from '@mui/icons-material/Add';

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { FCX } from 'react';
+import { FCX } from 'react';
 
 import AdditionButton from './condition-addition-button';
 import Tabs from './condition-tabs';

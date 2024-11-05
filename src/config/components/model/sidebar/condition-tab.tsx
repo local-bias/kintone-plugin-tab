@@ -1,5 +1,5 @@
 import { Tab, TabProps } from '@mui/material';
-import React, { FC, Suspense } from 'react';
+import { FC, Suspense } from 'react';
 import { useRecoilValue } from 'recoil';
 import { conditionsState } from '../../../states/plugin';
 

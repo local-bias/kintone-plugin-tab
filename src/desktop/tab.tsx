@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Tab, Tabs } from '@mui/material';
 import { useAtomValue } from 'jotai';
 import { useAtomCallback } from 'jotai/utils';
-import React, { FC, FCX, useCallback } from 'react';
+import { FC, FCX, useCallback } from 'react';
 import { refresh } from './actions';
 import { pluginConditionsAtom, tabIndexAtom } from './states';
 
@@ -15,7 +15,7 @@ const TabContainer: FC = () => {
   const tabIndex = useAtomValue(tabIndexAtom);
 
   const onTabChange = useAtomCallback(
-    useCallback(async (get, set, _: any, index: number) => {
+    useCallback(async (_, set, __: any, index: number) => {
       set(tabIndexAtom, index);
       refresh();
     }, [])
