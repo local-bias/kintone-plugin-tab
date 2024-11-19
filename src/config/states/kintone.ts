@@ -1,8 +1,7 @@
-import { selector } from 'recoil';
-import { getAppId } from '@lb-ribbit/kintone-xapp';
-import { flatLayout } from '@/lib/kintone-api';
-import { getFormFields, getFormLayout, kintoneAPI } from '@konomi-app/kintone-utilities';
 import { GUEST_SPACE_ID } from '@/lib/global';
+import { flatLayout } from '@/lib/kintone-api';
+import { getAppId, getFormFields, getFormLayout, kintoneAPI } from '@konomi-app/kintone-utilities';
+import { selector } from 'recoil';
 
 const PREFIX = `kintone`;
 

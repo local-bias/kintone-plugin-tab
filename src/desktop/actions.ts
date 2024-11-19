@@ -1,7 +1,6 @@
 import { flatLayout } from '@/lib/kintone-api';
 import { store } from '@/lib/store';
-import { kintoneAPI } from '@konomi-app/kintone-utilities';
-import { getSpaceElement, setFieldShown } from '@lb-ribbit/kintone-xapp';
+import { getSpaceElement, kintoneAPI, setFieldShown } from '@konomi-app/kintone-utilities';
 import { appFieldsAtom, appLayoutAtom, selectedConditionAtom } from './states';
 
 export const refresh = async () => {
