@@ -9,7 +9,7 @@ import {
   Notification,
 } from '@konomi-app/kintone-utilities-react';
 import { PluginErrorBoundary } from '@/lib/components/error-boundary';
-import Sidebar from './components/model/sidebar';
+import Sidebar from './components/sidebar';
 import Form from './components/model/form';
 import Footer from './components/model/footer';
 import config from '../../plugin.config.mjs';

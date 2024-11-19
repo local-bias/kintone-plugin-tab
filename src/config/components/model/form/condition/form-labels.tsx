@@ -56,7 +56,7 @@ const Component: FC = () => {
             <div key={i} className='flex gap-2 items-center'>
               <Autocomplete
                 value={label}
-                sx={{ width: '350px' }}
+                fullWidth
                 options={allLabels}
                 onChange={(_, lbl) => onLabelsChange(i, lbl ?? '')}
                 renderInput={(params) => (
