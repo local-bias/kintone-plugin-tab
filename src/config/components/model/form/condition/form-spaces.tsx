@@ -75,11 +75,13 @@ const Component: FC = () => {
                   <AddIcon fontSize='small' />
                 </IconButton>
               </Tooltip>
-              <Tooltip title='このフィールドを削除する'>
-                <IconButton size='small' onClick={() => deleteRow(i)}>
-                  <DeleteIcon fontSize='small' />
-                </IconButton>
-              </Tooltip>
+              {spaceIds.length > 1 && (
+                <Tooltip title='このフィールドを削除する'>
+                  <IconButton size='small' onClick={() => deleteRow(i)}>
+                    <DeleteIcon fontSize='small' />
+                  </IconButton>
+                </Tooltip>
+              )}
             </div>
           ))}
         </div>
