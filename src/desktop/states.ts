@@ -1,5 +1,5 @@
 import { GUEST_SPACE_ID } from '@/lib/global';
-import { restorePluginConfig } from '@/lib/plugin';
+import { PluginCondition, restorePluginConfig } from '@/lib/plugin';
 import { getAppId, getFormFields, getFormLayout, kintoneAPI } from '@konomi-app/kintone-utilities';
 import { atom } from 'jotai';
 // import { focusAtom } from 'jotai-optics';
@@ -12,7 +12,7 @@ export const pluginConfigAtom = atom(restorePluginConfig());
 // export const pluginConditionsAtom = focusAtom(pluginConfigAtom, (s) => s.prop('conditions'));
 export const pluginConditionsAtom = atom(
   (get) => get(pluginConfigAtom).conditions,
-  (_, set, newValue: Plugin.Condition[]) => {
+  (_, set, newValue: PluginCondition[]) => {
     set(pluginConfigAtom, (prev) => ({ ...prev, conditions: newValue }));
   }
 );

@@ -1,6 +1,7 @@
-import { FC, memo, Suspense } from 'react';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { produce } from 'immer';
+import { DisplayMode } from '@/lib/plugin';
+import { useRecoilRow } from '@konomi-app/kintone-utilities-react';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Autocomplete,
   FormControlLabel,
@@ -10,12 +11,12 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { produce } from 'immer';
+import { FC, memo, Suspense } from 'react';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { appLabelsState } from '../../../../states/kintone';
 import { labelDisplayModeState, labelsState } from '../../../../states/plugin';
 import { FormPlaceholder } from './form-placeholder';
-import { useRecoilRow } from '@konomi-app/kintone-utilities-react';
 
 const Component: FC = () => {
   const allLabels = useRecoilValue(appLabelsState);
@@ -26,7 +27,7 @@ const Component: FC = () => {
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(labelDisplayModeState, value as Plugin.DisplayMode);
+        set(labelDisplayModeState, value as DisplayMode);
       },
     []
   );

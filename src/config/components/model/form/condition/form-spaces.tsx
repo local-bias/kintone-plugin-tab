@@ -1,3 +1,7 @@
+import { DisplayMode } from '@/lib/plugin';
+import { useRecoilRow } from '@konomi-app/kintone-utilities-react';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Autocomplete,
   FormControlLabel,
@@ -10,12 +14,9 @@ import {
 import { produce } from 'immer';
 import { FC, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { appSpacesState } from '../../../../states/kintone';
 import { spaceDisplayModeState, spaceIdsState } from '../../../../states/plugin';
 import { FormPlaceholder } from './form-placeholder';
-import { useRecoilRow } from '@konomi-app/kintone-utilities-react';
 
 const Component: FC = () => {
   const appSpaces = useRecoilValue(appSpacesState);
@@ -26,7 +27,7 @@ const Component: FC = () => {
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(spaceDisplayModeState, value as Plugin.DisplayMode);
+        set(spaceDisplayModeState, value as DisplayMode);
       },
     []
   );

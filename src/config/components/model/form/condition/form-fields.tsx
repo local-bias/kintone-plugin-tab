@@ -1,14 +1,14 @@
+import { appFieldsState } from '@/config/states/kintone';
+import { DisplayMode } from '@/lib/plugin';
+import { RecoilFieldSelect, useRecoilRow } from '@konomi-app/kintone-utilities-react';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { FormControlLabel, IconButton, Radio, RadioGroup, Tooltip } from '@mui/material';
 import { produce } from 'immer';
 import { FC, memo, Suspense } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { fieldDisplayModeState, fieldsState } from '../../../../states/plugin';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-
 import { FormPlaceholder } from './form-placeholder';
-import { RecoilFieldSelect, useRecoilRow } from '@konomi-app/kintone-utilities-react';
-import { appFieldsState } from '@/config/states/kintone';
 
 const Component: FC = () => {
   const fields = useRecoilValue(fieldsState);
@@ -18,7 +18,7 @@ const Component: FC = () => {
   const onDisplayModeChange = useRecoilCallback(
     ({ set }) =>
       (_: any, value: string) => {
-        set(fieldDisplayModeState, value as Plugin.DisplayMode);
+        set(fieldDisplayModeState, value as DisplayMode);
       },
     []
   );
