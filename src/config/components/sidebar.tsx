@@ -1,5 +1,5 @@
 import { conditionsState, selectedConditionIdState } from '@/config/states/plugin';
-import { getNewCondition } from '@/lib/plugin';
+import { getNewCondition, PluginCondition, validateCondition } from '@/lib/plugin';
 import { BundledSidebar } from '@konomi-app/kintone-utilities-react';
 import { useSnackbar } from 'notistack';
 import { FC, useCallback } from 'react';
@@ -9,7 +9,7 @@ const Sidebar: FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [conditions, setConditions] = useRecoilState(conditionsState);
   const [selectedConditionId, setSelectedConditionId] = useRecoilState(selectedConditionIdState);
-  const label = useCallback((params: { condition: Plugin.Condition; index: number }) => {
+  const label = useCallback((params: { condition: PluginCondition; index: number }) => {
     const { condition, index } = params;
 
     return (
@@ -20,7 +20,7 @@ const Sidebar: FC = () => {
     );
   }, []);
 
-  const onSelectedConditionChange = (condition: Plugin.Condition | null) => {
+  const onSelectedConditionChange = (condition: PluginCondition | null) => {
     setSelectedConditionId(condition?.id ?? null);
   };
 
@@ -37,6 +37,30 @@ const Sidebar: FC = () => {
       onSelectedConditionChange={onSelectedConditionChange}
       selectedConditionId={selectedConditionId}
       onConditionDelete={onConditionDelete}
+      context={{
+        onCopy: () => {
+          console.log('copied');
+          enqueueSnackbar('設定情報をコピーしました', { variant: 'success' });
+        },
+        onPaste: () => {
+          enqueueSnackbar('設定情報を貼り付けました', { variant: 'success' });
+          return null;
+        },
+        onPasteFailure: () => {
+          enqueueSnackbar('設定情報の形式が正しくありません', { variant: 'error' });
+        },
+        onPasteValidation: (condition) => {
+          try {
+            validateCondition(condition);
+          } catch (error) {
+            return false;
+          }
+          return true;
+        },
+        onPasteValidationError: () => {
+          enqueueSnackbar('設定情報の形式が正しくありません', { variant: 'error' });
+        },
+      }}
     />
   );
 };

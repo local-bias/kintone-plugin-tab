@@ -2,13 +2,11 @@ import { manager } from '@/lib/listener';
 import { restorePluginConfig } from '@/lib/plugin';
 import { css } from '@emotion/css';
 import { isMobile } from '@konomi-app/kintone-utilities';
-import { createRoot, Root } from 'react-dom/client';
+import { ComponentManager } from '@konomi-app/kintone-utilities-react';
 import { refresh } from './actions';
 import App from './app';
 
 const ROOT_ID = 'ribbit-tab-plugin-root';
-
-let cachedRoot: Root | null = null;
 
 manager.add(
   ['app.record.create.show', 'app.record.edit.show', 'app.record.detail.show'],
@@ -22,29 +20,24 @@ manager.add(
     }
 
     refresh();
-    if (!cachedRoot) {
-      const target = document.querySelector('#record-gaia');
 
-      if (!target) {
-        console.log('タブをレンダリングする対象エレメントが取得できませんでした');
-        return event;
-      }
-
-      target.classList.add(css`
-        padding: 0 !important;
-        display: flex;
-        gap: 8px;
-      `);
-
-      const rootElement = document.createElement('div');
-      rootElement.id = ROOT_ID;
-      const root = createRoot(rootElement);
-      cachedRoot = root;
-
-      target.prepend(rootElement);
+    const target = document.querySelector('#record-gaia');
+    if (!target) {
+      console.log('タブをレンダリングする対象エレメントが取得できませんでした');
+      return event;
     }
+    target.classList.add(css`
+      padding: 0 !important;
+      display: flex;
+      gap: 8px;
+    `);
 
-    cachedRoot.render(<App />);
+    ComponentManager.getInstance().renderComponent({
+      id: ROOT_ID,
+      component: <App />,
+      parentElement: target,
+      prepend: true,
+    });
 
     return event;
   }
