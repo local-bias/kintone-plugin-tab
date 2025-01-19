@@ -1,23 +1,30 @@
-import { FC, memo } from 'react';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { produce } from 'immer';
+import {
+  pluginConditionsAtom,
+  selectedConditionIdAtom,
+  tabIndexAtom,
+} from '@/config/states/plugin';
 import { PluginConditionDeleteButton } from '@konomi-app/kintone-utilities-react';
-import { storageState, tabIndexState } from '@/config/states/plugin';
+import { useAtomValue } from 'jotai';
+import { useAtomCallback } from 'jotai/utils';
+import { FC, memo, useCallback } from 'react';
 
 const Container: FC = () => {
-  const index = useRecoilValue(tabIndexState);
+  const index = useAtomValue(tabIndexAtom);
 
-  const onClick = useRecoilCallback(
-    ({ set }) =>
-      async () => {
-        set(storageState, (_, _storage = _!) =>
-          produce(_storage, (draft) => {
-            draft.conditions.splice(index, 1);
-          })
+  const onClick = useAtomCallback(
+    useCallback(
+      async (get, set) => {
+        const selectedConditionId = get(selectedConditionIdAtom);
+        if (selectedConditionId === null) {
+          return;
+        }
+        set(pluginConditionsAtom, (current) =>
+          current.filter((condition) => condition.id !== selectedConditionId)
         );
-        set(tabIndexState, (i) => (i === 0 ? i : i - 1));
+        set(tabIndexAtom, (i) => (i === 0 ? i : i - 1));
       },
-    [index]
+      [index]
+    )
   );
 
   return <PluginConditionDeleteButton {...{ onClick }} />;
