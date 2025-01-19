@@ -1,38 +1,35 @@
-import { appFieldsState } from '@/config/states/kintone';
+import { appFieldsAtom } from '@/config/states/kintone';
 import { DisplayMode } from '@/lib/plugin';
-import { RecoilFieldSelect, useRecoilRow } from '@konomi-app/kintone-utilities-react';
+import { JotaiFieldSelect, useArray } from '@konomi-app/kintone-utilities-jotai';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { FormControlLabel, IconButton, Radio, RadioGroup, Tooltip } from '@mui/material';
 import { produce } from 'immer';
-import { FC, memo, Suspense } from 'react';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
+import { useAtomCallback } from 'jotai/utils';
+import { FC, memo, Suspense, useCallback } from 'react';
 import { fieldDisplayModeState, fieldsState } from '../../../../states/plugin';
 import { FormPlaceholder } from './form-placeholder';
 
 const Component: FC = () => {
-  const fields = useRecoilValue(fieldsState);
-  const displayMode = useRecoilValue(fieldDisplayModeState);
-  const { addRow, deleteRow } = useRecoilRow({ state: fieldsState, getNewRow: () => '' });
+  const fields = useAtomValue(fieldsState);
+  const displayMode = useAtomValue(fieldDisplayModeState);
+  const { addItem, deleteItem } = useArray(fieldsState);
 
-  const onDisplayModeChange = useRecoilCallback(
-    ({ set }) =>
-      (_: any, value: string) => {
-        set(fieldDisplayModeState, value as DisplayMode);
-      },
-    []
+  const onDisplayModeChange = useAtomCallback(
+    useCallback((_, set, __: any, value: string) => {
+      set(fieldDisplayModeState, value as DisplayMode);
+    }, [])
   );
 
-  const onFieldsChange = useRecoilCallback(
-    ({ set }) =>
-      (i: number, value: string) => {
-        set(fieldsState, (current) =>
-          produce(current, (draft) => {
-            draft[i] = value;
-          })
-        );
-      },
-    []
+  const onFieldsChange = useAtomCallback(
+    useCallback((_, set, i: number, value: string) => {
+      set(fieldsState, (current) =>
+        produce(current, (draft) => {
+          draft[i] = value;
+        })
+      );
+    }, [])
   );
 
   return (
@@ -48,19 +45,19 @@ const Component: FC = () => {
         <div className='grid gap-4'>
           {fields.map((field, i) => (
             <div key={i} className='flex gap-2 items-center'>
-              <RecoilFieldSelect
-                state={appFieldsState}
+              <JotaiFieldSelect
+                fieldPropertiesAtom={appFieldsAtom}
                 fieldCode={field}
                 onChange={(e) => onFieldsChange(i, e)}
               />
               <Tooltip title='フィールドを追加する'>
-                <IconButton size='small' onClick={() => addRow(i)}>
+                <IconButton size='small' onClick={() => addItem({ index: i + 1, newItem: '' })}>
                   <AddIcon fontSize='small' />
                 </IconButton>
               </Tooltip>
               {fields.length > 1 && (
                 <Tooltip title='このフィールドを削除する'>
-                  <IconButton size='small' onClick={() => deleteRow(i)}>
+                  <IconButton size='small' onClick={() => deleteItem(i)}>
                     <DeleteIcon fontSize='small' />
                   </IconButton>
                 </Tooltip>
