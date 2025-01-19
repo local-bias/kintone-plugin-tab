@@ -1,24 +1,25 @@
-import { Suspense, FC } from 'react';
-import { RecoilRoot } from 'recoil';
-import { SnackbarProvider } from 'notistack';
+import { PluginErrorBoundary } from '@/lib/components/error-boundary';
+import { URL_BANNER, URL_PROMOTION } from '@/lib/constants';
+import { store } from '@/lib/store';
 import {
+  Notification,
   PluginBanner,
+  PluginConfigProvider,
   PluginContent,
   PluginLayout,
-  PluginConfigProvider,
-  Notification,
 } from '@konomi-app/kintone-utilities-react';
-import { PluginErrorBoundary } from '@/lib/components/error-boundary';
-import Sidebar from './components/sidebar';
-import Form from './components/model/form';
-import Footer from './components/model/footer';
-import config from '../../plugin.config.mjs';
-import { URL_BANNER, URL_PROMOTION } from '@/lib/static';
 import { LoaderWithLabel } from '@konomi-app/ui-react';
+import { Provider } from 'jotai';
+import { SnackbarProvider } from 'notistack';
+import { FC, Suspense } from 'react';
+import config from '../../plugin.config.mjs';
+import Footer from './components/model/footer';
+import Form from './components/model/form';
+import Sidebar from './components/sidebar';
 
 const Component: FC = () => (
   <>
-    <RecoilRoot>
+    <Provider store={store}>
       <PluginErrorBoundary>
         <PluginConfigProvider config={config}>
           <Notification />
@@ -36,7 +37,7 @@ const Component: FC = () => (
           </SnackbarProvider>
         </PluginConfigProvider>
       </PluginErrorBoundary>
-    </RecoilRoot>
+    </Provider>
     <iframe
       title='promotion'
       loading='lazy'
