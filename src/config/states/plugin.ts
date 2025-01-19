@@ -1,106 +1,74 @@
 import { PluginCondition, PluginConfig, restorePluginConfig } from '@/lib/plugin';
 import { produce } from 'immer';
-import { DefaultValue, RecoilState, atom, selector, selectorFamily } from 'recoil';
+import { atom } from 'jotai';
+import { atomWithReset } from 'jotai/utils';
+import { SetStateAction } from 'react';
 
-const PREFIX = 'plugin';
+export const loadingAtom = atom<boolean>(false);
 
-export const loadingState = atom<boolean>({
-  key: `${PREFIX}loadingState`,
-  default: false,
-});
+export const pluginConfigAtom = atom<PluginConfig>(restorePluginConfig());
 
-export const storageState = atom<PluginConfig>({
-  key: `${PREFIX}storageState`,
-  default: restorePluginConfig(),
-});
+export const selectedConditionIdAtom = atomWithReset<string | null>(null);
 
-export const tabIndexState = atom<number>({
-  key: `${PREFIX}tabIndexState`,
-  default: 0,
-});
+export const tabIndexAtom = atom<number>(0);
 
-export const conditionsState = selector<PluginCondition[]>({
-  key: `${PREFIX}conditionsState`,
-  get: ({ get }) => {
-    const storage = get(storageState);
-    return storage.conditions;
-  },
-  set: ({ set }, newValue) => {
-    if (newValue instanceof DefaultValue) {
-      return;
-    }
-    set(storageState, (current) =>
+// export const pluginConditionsAtom = focusAtom(pluginConfigAtom, (s) => s.prop('conditions'));
+export const pluginConditionsAtom = atom(
+  (get) => get(pluginConfigAtom).conditions,
+  (_, set, newValue: SetStateAction<PluginCondition[]>) => {
+    set(pluginConfigAtom, (current) =>
       produce(current, (draft) => {
-        draft.conditions = newValue;
+        draft.conditions = typeof newValue === 'function' ? newValue(draft.conditions) : newValue;
       })
     );
-  },
-});
+  }
+);
 
-export const selectedConditionIdState = atom<string | null>({
-  key: `${PREFIX}selectedConditionIdState`,
-  default: selector<string | null>({
-    key: `${PREFIX}selectedConditionIdStateDefault`,
-    get: ({ get }) => {
-      return get(conditionsState)[0]?.id ?? null;
-    },
-  }),
-});
-
-export const selectedConditionState = selector<PluginCondition>({
-  key: `${PREFIX}selectedConditionState`,
-  get: ({ get }) => {
-    const conditions = get(conditionsState);
-    const selectedId = get(selectedConditionIdState);
-    return conditions.find((condition) => condition.id === selectedId) ?? conditions[0];
+export const selectedConditionAtom = atom(
+  (get) => {
+    const conditions = get(pluginConditionsAtom);
+    const selectedConditionId = get(selectedConditionIdAtom);
+    return conditions.find((condition) => condition.id === selectedConditionId) ?? conditions[0]!;
   },
-  set: ({ get, set }, newValue) => {
-    if (newValue instanceof DefaultValue) {
+  (get, set, newValue: SetStateAction<PluginCondition>) => {
+    const selectedConditionId = get(selectedConditionIdAtom);
+    const conditions = get(pluginConditionsAtom);
+    const index = conditions.findIndex((condition) => condition.id === selectedConditionId);
+    if (index === -1) {
       return;
     }
-    const conditions = get(conditionsState);
-    const index = conditions.findIndex((condition) => condition.id === newValue.id);
-    set(conditionsState, conditions.toSpliced(index, 1, newValue));
-  },
-});
+    set(pluginConfigAtom, (current) =>
+      produce(current, (draft) => {
+        draft.conditions[index] =
+          typeof newValue === 'function' ? newValue(draft.conditions[index]) : newValue;
+      })
+    );
+  }
+);
 
-const conditionPropertyState = selectorFamily<
-  PluginCondition[keyof PluginCondition],
-  keyof PluginCondition
->({
-  key: `${PREFIX}conditionPropertyState`,
-  get:
-    (key) =>
-    ({ get }) => {
-      const selectedCondition = get(selectedConditionState);
-      return selectedCondition[key];
+// export const getConditionPropertyAtom = <T extends keyof PluginCondition>(property: T) =>
+//   focusAtom(selectedConditionAtom, (s) => s.prop(property)) as PrimitiveAtom<PluginCondition[T]>;
+export const getConditionPropertyAtom = <T extends keyof PluginCondition>(property: T) =>
+  atom(
+    (get) => {
+      return get(selectedConditionAtom)[property];
     },
-  set:
-    (key) =>
-    ({ get, set }, newValue) => {
-      if (newValue instanceof DefaultValue) {
-        process.env.NODE_ENV === 'development' && console.warn('newValue is DefaultValue');
-        return;
-      }
-      set(selectedConditionState, (current) =>
-        produce(current, (draft) => {
-          // @ts-ignore
-          draft[key] = newValue;
+    (_, set, newValue: SetStateAction<PluginCondition[T]>) => {
+      set(selectedConditionAtom, (condition) =>
+        produce(condition, (draft) => {
+          draft[property] = typeof newValue === 'function' ? newValue(draft[property]) : newValue;
         })
       );
-    },
-});
+    }
+  );
 
-export const getConditionPropertyState = <T extends keyof PluginCondition>(property: T) =>
-  conditionPropertyState(property) as unknown as RecoilState<PluginCondition[T]>;
-
-export const tabNameState = getConditionPropertyState('tabName');
-export const fieldDisplayModeState = getConditionPropertyState('displayMode');
-export const fieldsState = getConditionPropertyState('fields');
-export const groupDisplayModeState = getConditionPropertyState('groupDisplayMode');
-export const groupsState = getConditionPropertyState('groups');
-export const labelDisplayModeState = getConditionPropertyState('labelDisplayMode');
-export const labelsState = getConditionPropertyState('labels');
-export const spaceDisplayModeState = getConditionPropertyState('spaceDisplayMode');
-export const spaceIdsState = getConditionPropertyState('spaceIds');
-export const hidesHRState = getConditionPropertyState('hidesHR');
+export const tabNameAtom = getConditionPropertyAtom('tabName');
+export const fieldDisplayModeState = getConditionPropertyAtom('displayMode');
+export const fieldsState = getConditionPropertyAtom('fields');
+export const groupDisplayModeState = getConditionPropertyAtom('groupDisplayMode');
+export const groupsState = getConditionPropertyAtom('groups');
+export const labelDisplayModeState = getConditionPropertyAtom('labelDisplayMode');
+export const labelsState = getConditionPropertyAtom('labels');
+export const spaceDisplayModeState = getConditionPropertyAtom('spaceDisplayMode');
+export const spaceIdsState = getConditionPropertyAtom('spaceIds');
+export const hidesHRState = getConditionPropertyAtom('hidesHR');
