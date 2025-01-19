@@ -1,5 +1,5 @@
 import { DisplayMode } from '@/lib/plugin';
-import { useRecoilRow } from '@konomi-app/kintone-utilities-react';
+import { useArray } from '@konomi-app/kintone-utilities-jotai';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -13,36 +13,33 @@ import {
   Tooltip,
 } from '@mui/material';
 import { produce } from 'immer';
-import { FC, memo, Suspense } from 'react';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { appGroupsState } from '../../../../states/kintone';
+import { useAtomValue } from 'jotai';
+import { useAtomCallback } from 'jotai/utils';
+import { FC, memo, Suspense, useCallback } from 'react';
+import { appGroupsAtom } from '../../../../states/kintone';
 import { groupDisplayModeState, groupsState } from '../../../../states/plugin';
 import { FormPlaceholder } from './form-placeholder';
 
 const Component: FC = () => {
-  const appGroups = useRecoilValue(appGroupsState);
-  const groupDisplayMode = useRecoilValue(groupDisplayModeState);
-  const groups = useRecoilValue(groupsState);
-  const { addRow, deleteRow } = useRecoilRow({ state: groupsState, getNewRow: () => '' });
+  const appGroups = useAtomValue(appGroupsAtom);
+  const groupDisplayMode = useAtomValue(groupDisplayModeState);
+  const groups = useAtomValue(groupsState);
+  const { addItem, deleteItem } = useArray(groupsState);
 
-  const onDisplayModeChange = useRecoilCallback(
-    ({ set }) =>
-      (_: any, value: string) => {
-        set(groupDisplayModeState, value as DisplayMode);
-      },
-    []
+  const onDisplayModeChange = useAtomCallback(
+    useCallback((_, set, __: any, value: string) => {
+      set(groupDisplayModeState, value as DisplayMode);
+    }, [])
   );
 
-  const onGroupChange = useRecoilCallback(
-    ({ set }) =>
-      (i: number, value: string) => {
-        set(groupsState, (current) =>
-          produce(current, (draft) => {
-            draft[i] = value;
-          })
-        );
-      },
-    []
+  const onGroupChange = useAtomCallback(
+    useCallback((_, set, i: number, value: string) => {
+      set(groupsState, (current) =>
+        produce(current, (draft) => {
+          draft[i] = value;
+        })
+      );
+    }, [])
   );
 
   return (
@@ -70,13 +67,13 @@ const Component: FC = () => {
                 )}
               />
               <Tooltip title='フィールドを追加する'>
-                <IconButton size='small' onClick={() => addRow(i)}>
+                <IconButton size='small' onClick={() => addItem({ index: i + 1, newItem: '' })}>
                   <AddIcon fontSize='small' />
                 </IconButton>
               </Tooltip>
               {groups.length > 1 && (
                 <Tooltip title='このフィールドを削除する'>
-                  <IconButton size='small' onClick={() => deleteRow(i)}>
+                  <IconButton size='small' onClick={() => deleteItem(i)}>
                     <DeleteIcon fontSize='small' />
                   </IconButton>
                 </Tooltip>
