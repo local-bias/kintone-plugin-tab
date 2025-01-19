@@ -1,18 +1,16 @@
-import { FC } from 'react';
-import { hidesHRState, tabNameState } from '../../../states/plugin';
-
-import FieldForm from './condition/form-fields';
-import GroupForm from './condition/form-groups';
-import SpaceForm from './condition/form-spaces';
-import LabelForm from './condition/form-labels';
-import ConditionDeletionButton from './condition-deletion-button';
+import { JotaiSwitch, JotaiText } from '@konomi-app/kintone-utilities-jotai';
 import {
   PluginFormDescription,
   PluginFormSection,
   PluginFormTitle,
-  RecoilSwitch,
-  RecoilText,
 } from '@konomi-app/kintone-utilities-react';
+import { FC } from 'react';
+import { hidesHRState, tabNameAtom } from '../../../states/plugin';
+import ConditionDeletionButton from './condition-deletion-button';
+import FieldForm from './condition/form-fields';
+import GroupForm from './condition/form-groups';
+import LabelForm from './condition/form-labels';
+import SpaceForm from './condition/form-spaces';
 
 const Component: FC = () => {
   return (
@@ -22,7 +20,7 @@ const Component: FC = () => {
         <PluginFormDescription last>
           レコード登録画面・詳細画面に表示するタブのタブ名を設定します。
         </PluginFormDescription>
-        <RecoilText state={tabNameState} className='input' label='タブ名' variant='outlined' />
+        <JotaiText atom={tabNameAtom} className='input' label='タブ名' variant='outlined' />
       </PluginFormSection>
       <PluginFormSection>
         <PluginFormTitle>フィールドの設定</PluginFormTitle>
@@ -53,7 +51,7 @@ const Component: FC = () => {
       </PluginFormSection>
       <PluginFormSection>
         <PluginFormTitle>罫線の設定</PluginFormTitle>
-        <RecoilSwitch state={hidesHRState} label='罫線を全て非表示' />
+        <JotaiSwitch atom={hidesHRState} label='罫線を全て非表示' />
       </PluginFormSection>
       <ConditionDeletionButton />
     </div>
