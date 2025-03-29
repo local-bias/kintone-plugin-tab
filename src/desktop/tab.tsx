@@ -1,21 +1,17 @@
 import styled from '@emotion/styled';
 import { Tab, Tabs } from '@mui/material';
-import { useAtomValue } from 'jotai';
-import { useAtomCallback } from 'jotai/utils';
-import { FC, FCX, useCallback } from 'react';
-import { refresh } from './actions';
+import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { FC, FCX } from 'react';
 import { pluginConditionsAtom, tabIndexAtom } from './states';
+
+const handleTabChangeAtom = atom(null, (_, set, __: unknown, index: number) => {
+  set(tabIndexAtom, index);
+});
 
 const TabContainer: FC = () => {
   const conditions = useAtomValue(pluginConditionsAtom);
   const tabIndex = useAtomValue(tabIndexAtom);
-
-  const onTabChange = useAtomCallback(
-    useCallback(async (_, set, __: any, index: number) => {
-      set(tabIndexAtom, index);
-      refresh();
-    }, [])
-  );
+  const onTabChange = useSetAtom(handleTabChangeAtom);
 
   return (
     <Tabs orientation='vertical' variant='scrollable' value={tabIndex} onChange={onTabChange}>
