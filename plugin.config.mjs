@@ -23,17 +23,25 @@ export default /** @type { const } */ ({
   manifest: {
     base: {
       manifest_version: 1,
-      version: '2.10.0',
+      version: '2.11.0',
       type: 'APP',
       name: {
         en: 'vertical tab plugin',
         ja: '垂直タブプラグイン',
         zh: '垂直标签插件',
+        'zh-TW': '垂直分頁插件',
+        es: 'Complemento de pestañas verticales',
+        'pt-BR': 'Complemento de guia vertical',
+        th: 'ปลั๊กอินแท็บแนวตั้ง',
       },
       description: {
         en: 'add vertical tab',
         ja: 'スクロールに追従する垂直方向のタブを追加します',
         zh: '添加垂直标签',
+        'zh-TW': '添加垂直分頁',
+        es: 'agrega pestañas verticales',
+        'pt-BR': 'adicionar guia vertical',
+        th: 'เพิ่มแท็บแนวตั้ง',
       },
       icon: 'icon.png',
       homepage_url: { ja: hp, en: hp },
