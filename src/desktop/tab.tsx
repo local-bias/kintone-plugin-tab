@@ -3,9 +3,11 @@ import { Tab, Tabs } from '@mui/material';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { FC, FCX } from 'react';
 import { pluginConditionsAtom, tabIndexAtom } from './states';
+import { refresh } from './actions';
 
-const handleTabChangeAtom = atom(null, (_, set, __: unknown, index: number) => {
+const handleTabChangeAtom = atom(null, (get, set, __: unknown, index: number) => {
   set(tabIndexAtom, index);
+  refresh(get);
 });
 
 const TabContainer: FC = () => {
