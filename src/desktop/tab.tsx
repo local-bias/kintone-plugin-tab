@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 import { Tab, Tabs } from '@mui/material';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { FC, FCX } from 'react';
-import { pluginConditionsAtom, tabIndexAtom } from './states';
 import { refresh } from './actions';
+import { pluginConditionsAtom, tabIndexAtom } from './states';
 
 const handleTabChangeAtom = atom(null, (get, set, __: unknown, index: number) => {
   set(tabIndexAtom, index);
