@@ -1,4 +1,4 @@
-import { GUEST_SPACE_ID } from '@/lib/global';
+import { GUEST_SPACE_ID, isDev } from '@/lib/global';
 import { PluginCondition, restorePluginConfig } from '@/lib/plugin';
 import { getAppId, getFormFields, getFormLayout, kintoneAPI } from '@konomi-app/kintone-utilities';
 import { atom } from 'jotai';
@@ -30,11 +30,7 @@ export const appFieldsAtom = atom<Promise<kintoneAPI.FieldProperties | null>>(as
   if (!app) {
     return null;
   }
-  const { properties } = await getFormFields({
-    app,
-    guestSpaceId: GUEST_SPACE_ID,
-    debug: process.env.NODE_ENV === 'development',
-  });
+  const { properties } = await getFormFields({ app, guestSpaceId: GUEST_SPACE_ID, debug: isDev });
   return properties;
 });
 
@@ -43,10 +39,6 @@ export const appLayoutAtom = atom<Promise<kintoneAPI.Layout | null>>(async (get)
   if (!app) {
     return null;
   }
-  const { layout } = await getFormLayout({
-    app,
-    guestSpaceId: GUEST_SPACE_ID,
-    debug: process.env.NODE_ENV === 'development',
-  });
+  const { layout } = await getFormLayout({ app, guestSpaceId: GUEST_SPACE_ID, debug: isDev });
   return layout;
 });
