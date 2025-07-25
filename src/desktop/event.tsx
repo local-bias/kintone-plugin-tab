@@ -6,7 +6,7 @@ import { ComponentManager } from '@konomi-app/kintone-utilities-react';
 import { refresh } from './actions';
 import App from './app';
 
-const ROOT_ID = 'ribbit-tab-plugin-root';
+const ROOT_ID = '🐸ribbit-tab-plugin-root';
 
 manager.add(
   ['app.record.create.show', 'app.record.edit.show', 'app.record.detail.show'],
